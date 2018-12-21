@@ -152,7 +152,7 @@ export default class Signup extends Component<Props> {
                                               onPress={this.handlePress.bind(this)}>
                                 <View style={styles.loginButtonFlex}>
                                     <Text style={styles.loginButtonText}>
-                                        ورود
+                                        ثبت نام
                                     </Text>
                                 </View>
                             </TouchableOpacity>
