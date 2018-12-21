@@ -17,16 +17,21 @@ export default class App extends Component<Props> {
 
     state = {
         loginView: true,
+        userInfo: '',
     };
 
-    setLoggInModalVisible = visible => {
-        this.setState({loginView: visible});
+    setLoggInModalVisible = inf => {
+        this.setState({loginView: false});
+        this.setState({userInfo: inf});
+    };
+
+    setLoggInModalVisibleU = visibleU => {
+        this.setState({userInfo: visibleU});
     };
 
     render() {
         return (
             <View style={{height: '100%', width: '100%'}}>
-
 
                 <Modal
                     animationIn="slideInUp"

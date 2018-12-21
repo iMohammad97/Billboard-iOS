@@ -17,6 +17,7 @@ export default class Login extends Component<Props> {
     constructor(props) {
         super(props);
         this.loggedIn = this.loggedIn.bind(this);
+        this.loggedInU = this.loggedInU.bind(this);
     };
     handlePress = async () => {
         fetch('http://127.0.0.1:5000/api/login', {
@@ -35,6 +36,17 @@ export default class Login extends Component<Props> {
                 this.setState({status: responseJson["status"]});
                 // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 if (this.state.status === "OK") {
+                    let events = '';
+                    events += this.state.credit;
+                    events += '-';
+                    events += this.state.email;
+                    events += '-';
+                    events += this.state.name;
+                    events += '-';
+                    events += this.state.role;
+                    events += '-';
+                    events += this.state.status;
+                    this.setState({serializedUser: events});
                     this.loggedIn();
                     // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 } else {
@@ -66,6 +78,7 @@ export default class Login extends Component<Props> {
         name: '',
         role: '',
         status: '',
+        serializedUser: '',
         // Screen parts :
         errorConsole: '',
         rememberMe: false,
@@ -73,7 +86,12 @@ export default class Login extends Component<Props> {
     };
 
     loggedIn() {
-        this.props.setLoggInModalVisible(false);
+        // this.loggedInU();
+        this.props.setLoggInModalVisible(this.state.serializedUser);
+
+    };
+    loggedInU() {
+        this.props.setLoggInModalVisibleU('lili');
     };
 
     render() {
@@ -105,7 +123,7 @@ export default class Login extends Component<Props> {
                     </View>
                     <View style={styles.inputContainer}>
                         <View style={styles.containerFlexInput}>
-                            <Text style={styles.errorConsoleStyleٍ}>
+                            <Text style={styles.errorConsoleStyle}>
                                 {this.state.errorConsole}
                             </Text>
                             <TextInput style={styles.textInputStyle} placeholder="نام کاربری"
@@ -228,7 +246,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderWidth: 0
     },
-    errorConsoleStyleٍ: {
+    errorConsoleStyle: {
         width: '60%',
         borderRadius: 0,
         height: 40,
