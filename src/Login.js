@@ -36,17 +36,17 @@ export default class Login extends Component<Props> {
                 this.setState({status: responseJson["status"]});
                 // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 if (this.state.status === "OK") {
-                    let events = '';
-                    events += this.state.credit;
-                    events += '-';
-                    events += this.state.email;
-                    events += '-';
-                    events += this.state.name;
-                    events += '-';
-                    events += this.state.role;
-                    events += '-';
-                    events += this.state.status;
-                    this.setState({serializedUser: events});
+                    let infos = '';
+                    infos += this.state.credit;
+                    infos += '-';
+                    infos += this.state.email;
+                    infos += '-';
+                    infos += this.state.name;
+                    infos += '-';
+                    infos += this.state.role;
+                    infos += '-';
+                    infos += this.state.status;
+                    this.setState({serializedUser: infos});
                     this.loggedIn();
                     // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 } else {
