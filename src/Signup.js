@@ -19,12 +19,12 @@ export default class Signup extends Component<Props> {
         this.signedUp = this.signedUp.bind(this);
     };
     handlePress = async () => {
-        fetch('http://127.0.0.1:5000/api/login', {
+        fetch('http://127.0.0.1:5000/api/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({"email": this.state.textInputUsername, "password": this.state.textInputPassword})
+            body: JSON.stringify({"name": this.state.textInputName, "email": this.state.textInputUsername, "password": this.state.textInputPassword})
         })
             .then((response) => response.json())
             .then((responseJson) => {

@@ -136,7 +136,7 @@ export default class App extends Component<Props> {
                     onRequestClose={() => {
                         alert('Modal has been closed.');
                     }}>
-                    <Signup setLoggInModalVisible={this.setLoggInModalVisible}/>
+                    <Signup setSignedUpModalVisible={this.setSignedUpModalVisible}/>
                 </Modal>
                 {/*<Text style={styles.instructions}>{instructions}</Text>*/}
             </View>
