@@ -72,6 +72,7 @@ export default class Login extends Component<Props> {
         // Text inputs :
         textInputUsername: "",
         textInputPassword: "",
+        textInputName: "",
         // API fetched data states:
         credit: '',
         email: '',
@@ -127,9 +128,9 @@ export default class Login extends Component<Props> {
                                 {this.state.errorConsole}
                             </Text>
                             <TextInput style={styles.textInputStyle} placeholder="نام"
-                                       onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
+                                       onChangeText={(textInputName) => this.setState({textInputName})}/>
                             <View style={{height: 10}}/>
-                            <TextInput style={styles.textInputStyle} placeholder="نام کاربری"
+                            <TextInput style={styles.textInputStyle} placeholder="ایمیل"
                                        onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
                             <View style={{height: 10}}/>
                             <TextInput style={styles.textInputStyle} placeholder="رمز عبور"
