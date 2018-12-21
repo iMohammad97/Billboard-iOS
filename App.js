@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, StatusBar, TouchableOpacity, Image} from 'react-native';
 import Modal from "react-native-modal";
 import Login from "./src/Login.js";
+import Signup from "./src/Signup.js";
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
     android:
@@ -16,7 +17,8 @@ export default class App extends Component<Props> {
     };
 
     state = {
-        loginView: true,
+        loginView: false,
+        signupView: true,
         userInfo: '',
         // API fetched data states:
         credit: '',
@@ -29,6 +31,11 @@ export default class App extends Component<Props> {
 
     setLoggInModalVisible = inf => {
         this.setState({loginView: false});
+        this.setState({userInfo: inf});
+        this.myFunction(inf)
+    };
+    setSignedUpModalVisible = inf => {
+        this.setState({signupView: false});
         this.setState({userInfo: inf});
         this.myFunction(inf)
     };
@@ -118,6 +125,18 @@ export default class App extends Component<Props> {
                         alert('Modal has been closed.');
                     }}>
                     <Login setLoggInModalVisible={this.setLoggInModalVisible}/>
+                </Modal>
+                <Modal
+                    animationIn="slideInUp"
+                    animationOut="slideOutDown"
+                    hideModalContentWhileAnimating={true}
+                    // onBackdropPress={() => this.setState({loginView: false})}
+                    isVisible={this.state.signupView}
+                    style={{margin: 0}}
+                    onRequestClose={() => {
+                        alert('Modal has been closed.');
+                    }}>
+                    <Signup setLoggInModalVisible={this.setLoggInModalVisible}/>
                 </Modal>
                 {/*<Text style={styles.instructions}>{instructions}</Text>*/}
             </View>
