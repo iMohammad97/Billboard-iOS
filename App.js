@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, StatusBar} from 'react-native';
+import {Platform, StyleSheet, Text, View, StatusBar, TouchableOpacity, Image} from 'react-native';
 import Modal from "react-native-modal";
 import Login from "./src/Login.js";
 const instructions = Platform.select({
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     navigationBar: {
-        backgroundColor: '#433E53',
+        backgroundColor: '#fc44c5',
         width: '100%',
         height: 30,
     },
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     navigationBase: {
-        backgroundColor: '#433E53',
+        backgroundColor: '#fc44c5',
         width: '100%',
         height: 50, //109
         shadowColor: "rgba(67, 82, 87, 0.4)",
