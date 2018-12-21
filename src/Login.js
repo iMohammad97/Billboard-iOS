@@ -19,22 +19,36 @@ export default class Login extends Component<Props> {
         this.loggedIn = this.loggedIn.bind(this);
     };
     handlePress = async () => {
-        let user = this.state.textInputUsername;
-        let pass = this.state.textInputPassword;
         fetch('http://127.0.0.1:5000/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({"email": "admin", "password": "admin"})
+            body: JSON.stringify({"email": this.state.textInputUsername, "password": this.state.textInputPassword})
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                this.setState({textInputUsername: responseJson["user"]["email"]});
-                this.setState({textInputPassword: responseJson["user"]["email"]});
-
-
-                Alert.alert("Author name at 0th index:  " + responseJson["user"]["name"]);
+                this.setState({email: responseJson["user"]["email"]});
+                this.setState({name: responseJson["user"]["name"]});
+                this.setState({credit: responseJson["user"]["credit"]});
+                this.setState({role: responseJson["user"]["role"]});
+                this.setState({status: responseJson["status"]});
+                // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                if (this.state.status === "OK") {
+                    Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                } else {
+                    let err = this.state.status;
+                    switch (err) {
+                        case "password incorrect":
+                            this.setState({errorConsole: "رمز عبور اشتباه است"});
+                            break;
+                        case "user not found":
+                            this.setState({errorConsole: "نام کاربری یافت نشد"});
+                            break;
+                        default:
+                            this.setState({errorConsole: "عدم ارتباط با سرور"});
+                    };
+                }
             })
             .catch((error) => {
                 console.error(error);
@@ -42,12 +56,17 @@ export default class Login extends Component<Props> {
     }
 
     state = {
+        // Text inputs :
         textInputUsername: "",
         textInputPassword: "",
+        // API fetched data states:
         credit: '',
         email: '',
         name: '',
         role: '',
+        status: '',
+        // Screen parts :
+        errorConsole: '',
         rememberMe: false,
         alertPopUpModal: false,
     };
@@ -80,6 +99,9 @@ export default class Login extends Component<Props> {
                                    source={require('./images/icLogo/icLogo.png')}/>
                             <Text style={styles.logoLabel}>
                                 Billboard
+                            </Text>
+                            <Text style={styles.textInputStyle}>
+                                {this.state.errorConsole}
                             </Text>
                         </View>
                     </View>
