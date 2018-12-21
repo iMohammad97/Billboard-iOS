@@ -126,6 +126,9 @@ export default class Login extends Component<Props> {
                             <Text style={styles.errorConsoleStyle}>
                                 {this.state.errorConsole}
                             </Text>
+                            <TextInput style={styles.textInputStyle} placeholder="نام"
+                                       onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
+                            <View style={{height: 10}}/>
                             <TextInput style={styles.textInputStyle} placeholder="نام کاربری"
                                        onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
                             <View style={{height: 10}}/>
