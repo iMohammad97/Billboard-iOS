@@ -41,7 +41,7 @@ export default class Login extends Component<Props> {
                         {/*}} style={styles.TouchableOpacitybound1}>*/}
                         {/*<View style={styles.TouchableOpacityboundFlexLeft}>*/}
                         {/*<Image style={styles.icLanguage}*/}
-                        {/*source={require('../images/icLanguage/icLanguage.png')}/>*/}
+                        {/*source={require('./images/icLanguage/icLanguage.png')}/>*/}
                         {/*</View>*/}
                         {/*</TouchableOpacity>*/}
                     </View>
@@ -51,7 +51,7 @@ export default class Login extends Component<Props> {
                     <View style={styles.logoContainer}>
                         <View style={styles.containerFlex}>
                             <Image style={styles.icLogo}
-                                   source={require('../images/icLogo/icLogo.png')}/>
+                                   source={require('./images/icLogo/icLogo.png')}/>
                             <Text style={styles.logoLabel}>
                                 Billboard
                             </Text>
@@ -91,7 +91,7 @@ export default class Login extends Component<Props> {
 
                         <TouchableOpacity onPress={this.loggedIn} style={styles.fingerprintButtonContainter}>
                             <Image style={styles.icFingerprint}
-                                   source={require('../images/icFingerprint/icFingerprint.png')}/>
+                                   source={require('./images/icFingerprint/icFingerprint.png')}/>
                             <Text style={styles.fingerprintButtonText}>
                                 ورود با اثر انگشت
                             </Text>
