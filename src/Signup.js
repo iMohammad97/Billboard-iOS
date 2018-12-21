@@ -158,16 +158,16 @@ export default class Signup extends Component<Props> {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={styles.footerContainer}>
+                    {/*<View style={styles.footerContainer}>*/}
 
-                        <TouchableOpacity onPress={this.signedUp} style={styles.fingerprintButtonContainter}>
-                            <Image style={styles.icFingerprint}
-                                   source={require('./images/icFingerprint/icFingerprint.png')}/>
-                            <Text style={styles.fingerprintButtonText}>
-                                ورود با اثر انگشت
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                        {/*<TouchableOpacity onPress={this.signedUp} style={styles.fingerprintButtonContainter}>*/}
+                            {/*<Image style={styles.icFingerprint}*/}
+                                   {/*source={require('./images/icFingerprint/icFingerprint.png')}/>*/}
+                            {/*<Text style={styles.fingerprintButtonText}>*/}
+                                {/*ورود با اثر انگشت*/}
+                            {/*</Text>*/}
+                        {/*</TouchableOpacity>*/}
+                    {/*</View>*/}
                 </View>
             </View>
         );
