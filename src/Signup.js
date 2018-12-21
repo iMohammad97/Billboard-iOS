@@ -132,20 +132,21 @@ export default class Signup extends Component<Props> {
                             <TextInput style={styles.textInputStyle} placeholder="رمز عبور"
                                        onChangeText={(textInputPassword) => this.setState({textInputPassword})}/>
                             <View style={{height: 20}}/>
-                            <View style={styles.containerRadioInput}>
-                                <View style={styles.containerRadioInputFlex}>
-                                    <Text style={styles.rememberMeText}>
-                                        به خاطر بسپار
-                                    </Text>
-                                    <RadioButton
-                                        animation={'bounceIn'}
-                                        isSelected={this.state.rememberMe}
-                                        innerColor={'#8BEADF'}
-                                        outerColor={'#8BEADF'}
-                                        onPress={() => this.setState({rememberMe: !this.state.rememberMe})}
-                                    />
-                                </View>
-                            </View>
+                            {/*<View style={styles.containerRadioInput}>*/}
+                                {/*<View style={styles.containerRadioInputFlex}>*/}
+                                    {/*<Text style={styles.rememberMeText}>*/}
+                                        {/*به خاطر بسپار*/}
+                                    {/*</Text>*/}
+                                    {/*<RadioButton*/}
+                                        {/*animation={'bounceIn'}*/}
+                                        {/*isSelected={this.state.rememberMe}*/}
+                                        {/*innerColor={'#8BEADF'}*/}
+                                        {/*outerColor={'#8BEADF'}*/}
+                                        {/*onPress={() => this.setState({rememberMe: !this.state.rememberMe})}*/}
+                                    {/*/>*/}
+                                {/*</View>*/}
+                            {/*</View>*/}
+
 
                             <TouchableOpacity style={styles.loginButtonStyle}
                                               onPress={this.handlePress.bind(this)}>
