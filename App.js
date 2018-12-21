@@ -13,16 +13,10 @@ type Props = {};
 export default class App extends Component<Props> {
     constructor(props) {
         super(props);
-        this.loggedIn = this.loggedIn.bind(this);
     };
 
     state = {
         loginView: true,
-    };
-
-    loggedIn() {
-        this.props.setModalVisible(false);
-
     };
 
     setLoggInModalVisible = visible => {
