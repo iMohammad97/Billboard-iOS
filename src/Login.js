@@ -12,10 +12,22 @@ import {
     ImageBackground, TouchableHighlight, AsyncStorage, TextInput,
 } from 'react-native';
 import Modal from "react-native-modal";
+import RadioButton from 'react-native-radio-button';
 export default class Login extends Component<Props> {
     constructor(props) {
         super(props);
         this.loggedIn = this.loggedIn.bind(this);
+    };
+
+    state = {
+        textInputUsername: 'نام کاربری',
+        textInputPassword: 'رمز عبور',
+        rememberMe: false,
+        alertPopUpModal: false,
+    };
+
+    loggedIn() {
+        this.props.setLoggInModalVisible(false);
     };
 
     render() {
@@ -34,9 +46,59 @@ export default class Login extends Component<Props> {
                         {/*</TouchableOpacity>*/}
                     </View>
                 </View>
+
+                <View style={styles.mainContainer}>
+                    <View style={styles.logoContainer}>
+                        <View style={styles.containerFlex}>
+                            <Image style={styles.icLogo}
+                                   source={require('../images/icLogo/icLogo.png')}/>
+                            <Text style={styles.logoLabel}>
+                                Billboard
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <View style={styles.containerFlexInput}>
+                            <TextInput style={styles.textInputStyle} value={this.state.textInputUsername}/>
+                            <View style={{height: 10}}/>
+                            <TextInput style={styles.textInputStyle} value={this.state.textInputPassword}/>
+                            <View style={{height: 20}}/>
+                            <View style={styles.containerRadioInput}>
+                                <View style={styles.containerRadioInputFlex}>
+                                    <Text style={styles.rememberMeText}>
+                                        به خاطر بسپار
+                                    </Text>
+                                    <RadioButton
+                                        animation={'bounceIn'}
+                                        isSelected={this.state.rememberMe}
+                                        innerColor={'#8BEADF'}
+                                        outerColor={'#8BEADF'}
+                                        onPress={() => this.setState({rememberMe: !this.state.rememberMe})}
+                                    />
+                                </View>
+                            </View>
+
+                            <TouchableOpacity style={styles.loginButtonStyle}>
+                                <View style={styles.loginButtonFlex}>
+                                    <Text style={styles.loginButtonText}>
+                                        ورود
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.footerContainer}>
+
+                        <TouchableOpacity onPress={this.loggedIn} style={styles.fingerprintButtonContainter}>
+                            <Image style={styles.icFingerprint}
+                                   source={require('../images/icFingerprint/icFingerprint.png')}/>
+                            <Text style={styles.fingerprintButtonText}>
+                                ورود با اثر انگشت
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
-
-
         );
     }
 }
