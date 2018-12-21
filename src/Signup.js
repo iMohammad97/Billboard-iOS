@@ -13,11 +13,10 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import RadioButton from 'react-native-radio-button';
-export default class Login extends Component<Props> {
+export default class Signup extends Component<Props> {
     constructor(props) {
         super(props);
-        this.loggedIn = this.loggedIn.bind(this);
-        this.loggedInU = this.loggedInU.bind(this);
+        this.signedUp = this.signedUp.bind(this);
     };
     handlePress = async () => {
         fetch('http://127.0.0.1:5000/api/login', {
@@ -47,7 +46,7 @@ export default class Login extends Component<Props> {
                     infos += '-';
                     infos += this.state.status;
                     this.setState({serializedUser: infos});
-                    this.loggedIn();
+                    this.signedUp();
                     // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 } else {
                     let err = this.state.status;
@@ -86,13 +85,10 @@ export default class Login extends Component<Props> {
         alertPopUpModal: false,
     };
 
-    loggedIn() {
+    signedUp() {
         // this.loggedInU();
-        this.props.setLoggInModalVisible(this.state.serializedUser);
+        this.props.setSignedUpModalVisible(this.state.serializedUser);
 
-    };
-    loggedInU() {
-        this.props.setLoggInModalVisibleU('lili');
     };
 
     render() {
@@ -163,7 +159,7 @@ export default class Login extends Component<Props> {
                     </View>
                     <View style={styles.footerContainer}>
 
-                        <TouchableOpacity onPress={this.loggedIn} style={styles.fingerprintButtonContainter}>
+                        <TouchableOpacity onPress={this.signedUp} style={styles.fingerprintButtonContainter}>
                             <Image style={styles.icFingerprint}
                                    source={require('./images/icFingerprint/icFingerprint.png')}/>
                             <Text style={styles.fingerprintButtonText}>
