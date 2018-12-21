@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     StatusBar,
     ScrollView,
-    ImageBackground, TouchableHighlight, AsyncStorage, TextInput,
+    ImageBackground, TouchableHighlight, AsyncStorage, TextInput, Alert,
 } from 'react-native';
 import Modal from "react-native-modal";
 import RadioButton from 'react-native-radio-button';
@@ -18,10 +18,36 @@ export default class Login extends Component<Props> {
         super(props);
         this.loggedIn = this.loggedIn.bind(this);
     };
+    handlePress = async () => {
+        let user = this.state.textInputUsername;
+        let pass = this.state.textInputPassword;
+        fetch('http://127.0.0.1:5000/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({"email": "admin", "password": "admin"})
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({textInputUsername: responseJson["user"]["email"]});
+                this.setState({textInputPassword: responseJson["user"]["email"]});
+
+
+                Alert.alert("Author name at 0th index:  " + responseJson["user"]["name"]);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 
     state = {
-        textInputUsername: '',
-        textInputPassword: '',
+        textInputUsername: "",
+        textInputPassword: "",
+        credit: '',
+        email: '',
+        name: '',
+        role: '',
         rememberMe: false,
         alertPopUpModal: false,
     };
@@ -80,7 +106,8 @@ export default class Login extends Component<Props> {
                                 </View>
                             </View>
 
-                            <TouchableOpacity style={styles.loginButtonStyle}>
+                            <TouchableOpacity style={styles.loginButtonStyle}
+                                              onPress={this.handlePress.bind(this)}>
                                 <View style={styles.loginButtonFlex}>
                                     <Text style={styles.loginButtonText}>
                                         ورود
