@@ -16,17 +16,30 @@ export default class App extends Component<Props> {
     };
 
     state = {
-        loginView: false,
+        loginView: true,
         userInfo: '',
+        // API fetched data states:
+        credit: '',
+        email: '',
+        name: '',
+        role: '',
+        status: '',
+        serializedUser: '',
     };
 
     setLoggInModalVisible = inf => {
         this.setState({loginView: false});
         this.setState({userInfo: inf});
+        this.myFunction(inf)
     };
-
-    setLoggInModalVisibleU = visibleU => {
-        this.setState({userInfo: visibleU});
+    myFunction = (userInfo) => {
+        let str = userInfo;
+        let arr = str.split("-");
+        this.setState({credit: arr[0]});
+        this.setState({email: arr[1]});
+        this.setState({name: arr[2]});
+        this.setState({role: arr[3]});
+        this.setState({status: arr[4]});
     };
 
     render() {
@@ -34,8 +47,6 @@ export default class App extends Component<Props> {
             <View style={{height: '100%', width: '100%'}}>
                 <StatusBar hidden/>
                 <View style={styles.navigationBar}/>
-
-
                 <View style={styles.navigationBase}>
                     <View style={styles.navigationBaseItems}>
                         <TouchableOpacity onPress={() => this.setState({loginView: true})}
@@ -45,6 +56,9 @@ export default class App extends Component<Props> {
                                        source={require('./src/images/icLougout/icLougout.png')}/>
                             </View>
                         </TouchableOpacity>
+                        <Text style={styles.logoLabel}>
+                            Billboard
+                        </Text>
                         <TouchableOpacity onPress={() => this.setState({sidebarModal: true})}
                                           style={styles.TouchableOpacityboundLeft}>
                             <View style={styles.TouchableOpacityboundFlexLeft}>
@@ -52,6 +66,44 @@ export default class App extends Component<Props> {
                                        source={require('./src/images/icSidebar/icSidebar.png')}/>
                             </View>
                         </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.mainContainer}>
+                    <View style={styles.profileCard}>
+                        <View style={styles.profileCardContainer}>
+                            <View style={styles.infoRow}>
+                                <Text style={styles.infoData}>
+                                    {this.state.name}
+                                </Text>
+                                <Text style={styles.infoLabel}>
+                                    نام:
+                                </Text>
+                            </View>
+                            <View style={styles.infoRow}>
+                                <Text style={styles.infoData}>
+                                    {this.state.role}
+                                </Text>
+                                <Text style={styles.infoLabel}>
+                                    سمت:
+                                </Text>
+                            </View>
+                            <View style={styles.infoRow}>
+                                <Text style={styles.infoData}>
+                                    {this.state.credit}
+                                </Text>
+                                <Text style={styles.infoLabel}>
+                                    اعتبار:
+                                </Text>
+                            </View>
+                            <View style={styles.infoRow}>
+                                <Text style={styles.infoData}>
+                                    {this.state.email}
+                                </Text>
+                                <Text style={styles.infoLabel}>
+                                    ایمیل:
+                                </Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
 
@@ -75,6 +127,63 @@ export default class App extends Component<Props> {
 
 
 const styles = StyleSheet.create({
+    infoData: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
+        textAlign: 'right',
+        paddingRight: 5,
+        color: '#ea24a3',
+    },
+    infoLabel: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'right',
+        color: '#ea24a3',
+    },
+    infoRow: {
+        height: 30,
+        // borderWidth: 5,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    profileCardContainer: {
+        margin: 20,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        backgroundColor: 'transparent',
+    },
+    profileCard: {
+        width: '100%',
+        height: 200,
+        borderRadius: 5,
+        backgroundColor: '#fcc8f1'
+    },
+    mainContainer: {
+        marginTop: 20,
+        marginRight: 20,
+        marginLeft: 20,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+    },
+    logoLabel: {
+        // width: '100%',
+        fontFamily: Platform.OS === 'ios' ? "Freestyle Script" : "FREESCPT",
+        fontSize: 35,
+        fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
+        borderColor: 'green',
+        textAlign: 'center',
+        color: 'white',
+        // marginTop: 10
+    },
     icBack: {
         height: 20,
         width: 20,
