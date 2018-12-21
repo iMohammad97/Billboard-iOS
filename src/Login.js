@@ -20,8 +20,8 @@ export default class Login extends Component<Props> {
     };
 
     state = {
-        textInputUsername: 'نام کاربری',
-        textInputPassword: 'رمز عبور',
+        textInputUsername: '',
+        textInputPassword: '',
         rememberMe: false,
         alertPopUpModal: false,
     };
@@ -59,9 +59,11 @@ export default class Login extends Component<Props> {
                     </View>
                     <View style={styles.inputContainer}>
                         <View style={styles.containerFlexInput}>
-                            <TextInput style={styles.textInputStyle} value={this.state.textInputUsername}/>
+                            <TextInput style={styles.textInputStyle} placeholder="نام کاربری"
+                                       onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
                             <View style={{height: 10}}/>
-                            <TextInput style={styles.textInputStyle} value={this.state.textInputPassword}/>
+                            <TextInput style={styles.textInputStyle} placeholder="رمز عبور"
+                                       onChangeText={(textInputPassword) => this.setState({textInputPassword})}/>
                             <View style={{height: 20}}/>
                             <View style={styles.containerRadioInput}>
                                 <View style={styles.containerRadioInputFlex}>
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#433E53',
+        backgroundColor: '#fc44c5',
     },
     containerFlex: {
         flex: 1,
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     navigationBar: {
-        backgroundColor: '#433E53',
+        backgroundColor: '#fc44c5',
         width: '100%',
         height: 30,
     },
@@ -291,7 +293,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     navigationBase: {
-        backgroundColor: '#433E53',
+        backgroundColor: '#fc44c5',
         width: '100%',
         height: 50, //109
         shadowColor: "rgba(67, 82, 87, 0.4)",
