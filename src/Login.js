@@ -106,13 +106,13 @@ export default class Login extends Component<Props> {
 const styles = StyleSheet.create({
     logoLabel: {
         width: '100%',
-        fontFamily: Platform.OS === 'ios' ? "Roboto" : "Roboto-Bold",
-        fontSize: 20,
-        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        fontFamily: Platform.OS === 'ios' ? "Freestyle Script" : "FREESCPT",
+        fontSize: 40,
+        fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         borderColor: 'green',
         textAlign: 'center',
         color: 'white',
-        marginTop: 0
+        marginTop: 10
     },
     alertPopUpWindow: {
         width: '100%',
@@ -225,8 +225,8 @@ const styles = StyleSheet.create({
         height: '30%',
     },
     icLogo: {
-        width: 200,
-        height: 200
+        width: 150,
+        height: 150
     },
     instructions: {
         textAlign: 'center',

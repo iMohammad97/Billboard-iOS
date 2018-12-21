@@ -61,6 +61,7 @@
 		42235EB9E42A4CF88E62290B /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F982FB2DF294A61BC0B6963 /* Roboto-Regular.ttf */; };
 		65C7C359DBB844A19632DD0F /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA43A49BBFE447C3BDBBA490 /* Roboto-Thin.ttf */; };
 		031AAB0F9D55434AA8083F2A /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F8883EBF39B41FEA2284050 /* Roboto-ThinItalic.ttf */; };
+		B0F74D57DD0144429759504A /* FREESCPT.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 38B38F5B27F74E189F1EA328 /* FREESCPT.TTF */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -390,6 +391,7 @@
 		2F982FB2DF294A61BC0B6963 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		BA43A49BBFE447C3BDBBA490 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; name = "Roboto-Thin.ttf"; path = "../assets/fonts/Roboto-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		0F8883EBF39B41FEA2284050 /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; name = "Roboto-ThinItalic.ttf"; path = "../assets/fonts/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		38B38F5B27F74E189F1EA328 /* FREESCPT.TTF */ = {isa = PBXFileReference; name = "FREESCPT.TTF"; path = "../assets/fonts/FREESCPT.TTF"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -678,6 +680,7 @@
 				2F982FB2DF294A61BC0B6963 /* Roboto-Regular.ttf */,
 				BA43A49BBFE447C3BDBBA490 /* Roboto-Thin.ttf */,
 				0F8883EBF39B41FEA2284050 /* Roboto-ThinItalic.ttf */,
+				38B38F5B27F74E189F1EA328 /* FREESCPT.TTF */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1153,6 +1156,7 @@
 				42235EB9E42A4CF88E62290B /* Roboto-Regular.ttf in Resources */,
 				65C7C359DBB844A19632DD0F /* Roboto-Thin.ttf in Resources */,
 				031AAB0F9D55434AA8083F2A /* Roboto-ThinItalic.ttf in Resources */,
+				B0F74D57DD0144429759504A /* FREESCPT.TTF in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
