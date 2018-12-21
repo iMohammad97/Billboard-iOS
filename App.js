@@ -22,6 +22,7 @@ export default class App extends Component<Props> {
 
     loggedIn() {
         this.props.setModalVisible(false);
+
     };
 
     setLoggInModalVisible = visible => {

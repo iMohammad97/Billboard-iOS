@@ -35,18 +35,19 @@ export default class Login extends Component<Props> {
                 this.setState({status: responseJson["status"]});
                 // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 if (this.state.status === "OK") {
-                    Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                    this.loggedIn();
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 } else {
                     let err = this.state.status;
                     switch (err) {
                         case "password incorrect":
-                            this.setState({errorConsole: "رمز عبور اشتباه است"});
+                            this.setState({errorConsole: "خطا:‌ رمز عبور اشتباه است"});
                             break;
                         case "user not found":
-                            this.setState({errorConsole: "نام کاربری یافت نشد"});
+                            this.setState({errorConsole: "خطا: نام کاربری یافت نشد"});
                             break;
                         default:
-                            this.setState({errorConsole: "عدم ارتباط با سرور"});
+                            this.setState({errorConsole: "خطا: عدم ارتباط با سرور"});
                     };
                 }
             })
@@ -100,13 +101,13 @@ export default class Login extends Component<Props> {
                             <Text style={styles.logoLabel}>
                                 Billboard
                             </Text>
-                            <Text style={styles.textInputStyle}>
-                                {this.state.errorConsole}
-                            </Text>
                         </View>
                     </View>
                     <View style={styles.inputContainer}>
                         <View style={styles.containerFlexInput}>
+                            <Text style={styles.errorConsoleStyleٍ}>
+                                {this.state.errorConsole}
+                            </Text>
                             <TextInput style={styles.textInputStyle} placeholder="نام کاربری"
                                        onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
                             <View style={{height: 10}}/>
@@ -220,6 +221,21 @@ const styles = StyleSheet.create({
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
         fontSize: 12,
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
+        borderColor: '#8BEADF',
+        textAlign: 'right',
+        color: 'white',
+        paddingRight: 5,
+        borderBottomWidth: 2,
+        borderWidth: 0
+    },
+    errorConsoleStyleٍ: {
+        width: '60%',
+        borderRadius: 0,
+        height: 40,
+        backgroundColor: 'transparent',
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 12,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         borderColor: '#8BEADF',
         textAlign: 'right',
         color: 'white',
