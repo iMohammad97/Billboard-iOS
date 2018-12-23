@@ -16,7 +16,6 @@ import RadioButton from 'react-native-radio-button';
 export default class SignUpScreen extends Component<Props> {
     constructor(props) {
         super(props);
-        this.signedUp = this.signedUp.bind(this);
     };
     handlePress = async () => {
         fetch('http://127.0.0.1:5000/api/signup', {
@@ -26,27 +25,20 @@ export default class SignUpScreen extends Component<Props> {
             },
             body: JSON.stringify({"name": this.state.textInputName, "email": this.state.textInputUsername, "password": this.state.textInputPassword})
         })
-            .then((response) => response.json())
+            .then((response) =>  {
+                // console.log('response', response);
+                return response.json();
+            })
             .then((responseJson) => {
                 this.setState({email: responseJson["user"]["email"]});
                 this.setState({name: responseJson["user"]["name"]});
-                this.setState({credit: responseJson["user"]["credit"]});
+                this.setState({credit: String(responseJson["user"]["credit"])});
                 this.setState({role: responseJson["user"]["role"]});
+                this.setState({id: String(responseJson["user"]["id"])});
                 this.setState({status: responseJson["status"]});
                 // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 if (this.state.status === "OK") {
-                    let infos = '';
-                    infos += this.state.credit;
-                    infos += '-';
-                    infos += this.state.email;
-                    infos += '-';
-                    infos += this.state.name;
-                    infos += '-';
-                    infos += this.state.role;
-                    infos += '-';
-                    infos += this.state.status;
-                    this.setState({serializedUser: infos});
-                    this.signedUp();
+                    this.signUpAndSignInAsync()
                     // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 } else {
                     let err = this.state.status;
@@ -77,6 +69,7 @@ export default class SignUpScreen extends Component<Props> {
         email: '',
         name: '',
         role: '',
+        id: '',
         status: '',
         serializedUser: '',
         // Screen parts :
@@ -84,11 +77,18 @@ export default class SignUpScreen extends Component<Props> {
         rememberMe: false,
         alertPopUpModal: false,
     };
+    static navigationOptions = {
+        header: null,
+    };
 
-    signedUp() {
-        // this.loggedInU();
-        this.props.setSignedUpModalVisible(this.state.serializedUser);
-
+    signUpAndSignInAsync = async () => {
+        await AsyncStorage.setItem('credit', this.state.credit);
+        await AsyncStorage.setItem('email', this.state.email);
+        await AsyncStorage.setItem('name', this.state.name);
+        await AsyncStorage.setItem('role', this.state.role);
+        await AsyncStorage.setItem('status', this.state.status);
+        await AsyncStorage.setItem('id', this.state.id);
+        this.props.navigation.navigate('App');
     };
 
     render() {
@@ -149,7 +149,7 @@ export default class SignUpScreen extends Component<Props> {
 
 
                             <TouchableOpacity style={styles.loginButtonStyle}
-                                              onPress={this.handlePress.bind(this)}>
+                                              onPress={this.handlePress}>
                                 <View style={styles.loginButtonFlex}>
                                     <Text style={styles.loginButtonText}>
                                         ثبت نام

@@ -1,28 +1,12 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, StatusBar, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
-import Modal from "react-native-modal";
+import {AsyncStorage, Platform, StyleSheet, Text, View, StatusBar, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
 import LoginScreen from "./src/Login.js";
 import SignUpScreen from "./src/Signup.js";
 import HomeScreen from "./src/Home.js";
 import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 // class Appp extends Component<Props> {
-//     constructor(props) {
-//         super(props);
-//     };
 //
-//     state = {
-//         loginView: false,
-//         signupView: true,
-//         userInfo: '',
-//         // API fetched data states:
-//         credit: '',
-//         email: '',
-//         name: '',
-//         role: '',
-//         status: '',
-//         serializedUser: '',
-//     };
 //
 //     setLoggInModalVisible = inf => {
 //         this.setState({loginView: false});
@@ -58,11 +42,11 @@ class AuthLoadingScreen extends React.Component {
 
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
-        const userToken = await AsyncStorage.getItem('userToken');
+        const user = await AsyncStorage.getItem('status');
 
         // This will switch to the App screen or Auth screen and this loading
         // screen will be unmounted and thrown away.
-        this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+        this.props.navigation.navigate((user === "OK") ? 'App' : 'Auth');
     };
 
     // Render any loading content that you like here
