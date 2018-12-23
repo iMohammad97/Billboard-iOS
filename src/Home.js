@@ -8,10 +8,8 @@ import {
     View,
 } from 'react-native';
 import Modal from "react-native-modal";
-import Login from "./Login";
-import Signup from "./Signup";
 
-export class HomeScreen extends React.Component {
+export default class HomeScreen extends React.Component {
     static navigationOptions = {
         title: 'Billboard',
     };
@@ -27,7 +25,7 @@ export class HomeScreen extends React.Component {
                                           style={styles.TouchableOpacityboundLeft}>
                             <View style={styles.TouchableOpacityboundFlexLeft}>
                                 <Image style={styles.icLogout}
-                                       source={require('./src/images/icLougout/icLougout.png')}/>
+                                       source={require('./images/icLougout/icLougout.png')}/>
                             </View>
                         </TouchableOpacity>
                         <Text style={styles.logoLabel}>
@@ -37,7 +35,7 @@ export class HomeScreen extends React.Component {
                                           style={styles.TouchableOpacityboundLeft}>
                             <View style={styles.TouchableOpacityboundFlexLeft}>
                                 <Image style={styles.icSidebar}
-                                       source={require('./src/images/icSidebar/icSidebar.png')}/>
+                                       source={require('./images/icSidebar/icSidebar.png')}/>
                             </View>
                         </TouchableOpacity>
                     </View>

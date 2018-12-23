@@ -13,11 +13,9 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import RadioButton from 'react-native-radio-button';
-export class LoginScreen extends Component<Props> {
+export default class LoginScreen extends Component<Props> {
     constructor(props) {
         super(props);
-        this.loggedIn = this.loggedIn.bind(this);
-        this.loggedInU = this.loggedInU.bind(this);
     };
     handlePress = async () => {
         fetch('http://127.0.0.1:5000/api/login', {
@@ -33,21 +31,11 @@ export class LoginScreen extends Component<Props> {
                 this.setState({name: responseJson["user"]["name"]});
                 this.setState({credit: responseJson["user"]["credit"]});
                 this.setState({role: responseJson["user"]["role"]});
+                this.setState({id: responseJson["user"]["id"]});
                 this.setState({status: responseJson["status"]});
                 // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 if (this.state.status === "OK") {
-                    let infos = '';
-                    infos += this.state.credit;
-                    infos += '-';
-                    infos += this.state.email;
-                    infos += '-';
-                    infos += this.state.name;
-                    infos += '-';
-                    infos += this.state.role;
-                    infos += '-';
-                    infos += this.state.status;
-                    this.setState({serializedUser: infos});
-                    this.loggedIn();
+                    this._signInAsync()
                     // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 } else {
                     let err = this.state.status;
@@ -78,6 +66,7 @@ export class LoginScreen extends Component<Props> {
         name: '',
         role: '',
         status: '',
+        id: '',
         serializedUser: '',
         // Screen parts :
         errorConsole: '',

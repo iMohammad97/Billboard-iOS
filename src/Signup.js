@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import RadioButton from 'react-native-radio-button';
-export class SignUpScreen extends Component<Props> {
+export default class SignUpScreen extends Component<Props> {
     constructor(props) {
         super(props);
         this.signedUp = this.signedUp.bind(this);
