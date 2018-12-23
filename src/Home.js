@@ -13,7 +13,7 @@ import Signup from "./Signup";
 
 export class HomeScreen extends React.Component {
     static navigationOptions = {
-        title: 'Welcome to the app!',
+        title: 'Billboard',
     };
 
     render() {
