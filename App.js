@@ -1,10 +1,19 @@
 import React, {Component} from 'react';
-import {AsyncStorage, Platform, StyleSheet, Text, View, StatusBar, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
+import {
+    AsyncStorage,
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    StatusBar,
+    TouchableOpacity,
+    Image,
+    ActivityIndicator
+} from 'react-native';
 import LoginScreen from "./src/Login.js";
 import SignUpScreen from "./src/Signup.js";
 import HomeScreen from "./src/Home.js";
-import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
-
+import {createStackNavigator, createSwitchNavigator, createAppContainer, createDrawerNavigator, DrawerItems} from 'react-navigation';
 
 
 class AuthLoadingScreen extends React.Component {
@@ -26,25 +35,34 @@ class AuthLoadingScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <ActivityIndicator />
-                <StatusBar barStyle="default" />
+                <ActivityIndicator/>
+                <StatusBar barStyle="default"/>
             </View>
         );
     }
 }
-const AppStack = createStackNavigator({ Home: HomeScreen});
-const AuthStack = createStackNavigator({ LogIn: LoginScreen, SignUp: SignUpScreen });
 
-export default createAppContainer(createSwitchNavigator(
+const AppStack = createStackNavigator({Home: HomeScreen});
+const AuthStack = createStackNavigator({LogIn: LoginScreen, SignUp: SignUpScreen});
+const drw = createDrawerNavigator(
     {
-        AuthScreen: AuthLoadingScreen,
-        App: AppStack,
-        Auth: AuthStack,
-    },
-    {
-        initialRouteName: 'AuthScreen',
-    }
-));
+        Home: HomeScreen,
+    }, {
+        drawerPosition: 'right',
+    });
+export default createAppContainer(
+    createSwitchNavigator(
+        {
+            AuthScreen: AuthLoadingScreen,
+            App: AppStack,
+            Auth: AuthStack,
+            drw: drw,
+        },
+        {
+            initialRouteName: 'AuthScreen',
+            initialRouteName: 'drw',
+        })
+);
 
 const styles = StyleSheet.create({
     container: {

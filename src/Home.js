@@ -32,6 +32,13 @@ export default class HomeScreen extends React.Component {
     static navigationOptions = {
         header: null,
         title: 'Billboard',
+        drawerLabel: 'Home',
+        drawerIcon: ({ tintColor }) => (
+            <Image
+                source={require('./images/icHome/icHome.png')}
+                style={[styles.sideIcon, {tintColor: tintColor}]}
+            />
+        ),
     };
 
 
@@ -123,6 +130,10 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    sideIcon: {
+        width: 20,
+        height: 20
+    },
     infoData: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
         fontSize: 17,
@@ -183,7 +194,7 @@ const styles = StyleSheet.create({
     icBack: {
         height: 20,
         width: 20,
-        marginRight: 10,
+        // marginRight: 10,
     },
     backButtonText: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
