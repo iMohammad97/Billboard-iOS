@@ -98,13 +98,11 @@ export default class SignUpScreen extends Component<Props> {
                 <View style={styles.navigationBar}/>
                 <View style={styles.navigationBase}>
                     <View style={styles.navigationBaseItems}>
-                        {/*<TouchableOpacity onPress={() => {*/}
-                        {/*}} style={styles.TouchableOpacitybound1}>*/}
-                        {/*<View style={styles.TouchableOpacityboundFlexLeft}>*/}
-                        {/*<Image style={styles.icLanguage}*/}
-                        {/*source={require('./images/icLanguage/icLanguage.png')}/>*/}
-                        {/*</View>*/}
-                        {/*</TouchableOpacity>*/}
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}
+                                          style={styles.TouchableOpacityboundLeft}>
+                            <Image style={styles.icPrevious}
+                                   source={require('./images/icPrevious/icPrevious.png')}/>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -207,6 +205,10 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
     },
+    icPrevious: {
+        width: 30,
+        height: 30
+    },
     fingerprintButtonText: {
         height: '100%',
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
@@ -281,7 +283,7 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         width: '100%',
-        height: '100%',
+        height: '90%',
         backgroundColor: '#fc44c5',
     },
     containerFlex: {
@@ -333,14 +335,15 @@ const styles = StyleSheet.create({
     navigationBaseItems: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingRight: 10,
+        paddingLeft: 10,
+        paddingTop: 10
     },
     TouchableOpacityboundLeft: {
         width: 60,
-        height: 28,
-        marginLeft: 10,
+        height: '100%',
+        marginLeft: 0,
     },
     TouchableOpacityboundFlexLeft: {
         flex: 1,
@@ -379,14 +382,7 @@ const styles = StyleSheet.create({
     navigationBase: {
         backgroundColor: '#fc44c5',
         width: '100%',
-        height: 50, //109
-        shadowColor: "rgba(67, 82, 87, 0.4)",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowRadius: 5,
-        shadowOpacity: 0,
+        height: "10%", //109
     },
     navigationBaseDown: {
         backgroundColor: 'rgb(255, 255, 255)',
