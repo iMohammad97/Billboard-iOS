@@ -90,9 +90,6 @@ export class LoginScreen extends Component<Props> {
         this.props.setLoggInModalVisible(this.state.serializedUser);
 
     };
-    loggedInU() {
-        this.props.setLoggInModalVisibleU('lili');
-    };
 
     render() {
         return (
@@ -171,6 +168,15 @@ export class LoginScreen extends Component<Props> {
             </View>
         );
     }
+
+    _signInAsync = async () => {
+        await AsyncStorage.setItem('credit', this.state.credit);
+        await AsyncStorage.setItem('email', this.state.email);
+        await AsyncStorage.setItem('name', this.state.name);
+        await AsyncStorage.setItem('role', this.state.role);
+        await AsyncStorage.setItem('status', this.state.status);
+        this.props.navigation.navigate('App');
+    };
 }
 
 const styles = StyleSheet.create({
