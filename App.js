@@ -5,34 +5,7 @@ import SignUpScreen from "./src/Signup.js";
 import HomeScreen from "./src/Home.js";
 import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 
-// class Appp extends Component<Props> {
-//
-//
-//     setLoggInModalVisible = inf => {
-//         this.setState({loginView: false});
-//         this.setState({userInfo: inf});
-//         this.myFunction(inf)
-//     };
-//     setSignedUpModalVisible = inf => {
-//         this.setState({signupView: false});
-//         this.setState({userInfo: inf});
-//         this.myFunction(inf)
-//     };
-//     myFunction = (userInfo) => {
-//         let str = userInfo;
-//         let arr = str.split("-");
-//         this.setState({credit: arr[0]});
-//         this.setState({email: arr[1]});
-//         this.setState({name: arr[2]});
-//         this.setState({role: arr[3]});
-//         this.setState({status: arr[4]});
-//     };
-//
-//     render() {
-//         return ({}
-//         );
-//     }
-// }
+
 
 class AuthLoadingScreen extends React.Component {
     constructor() {
