@@ -13,12 +13,12 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import RadioButton from 'react-native-radio-button';
-export default class Login extends Component<Props> {
+
+export default class LoginScreen extends Component<Props> {
     constructor(props) {
         super(props);
-        this.loggedIn = this.loggedIn.bind(this);
-        this.loggedInU = this.loggedInU.bind(this);
     };
+
     handlePress = async () => {
         fetch('http://127.0.0.1:5000/api/login', {
             method: 'POST',
@@ -27,27 +27,21 @@ export default class Login extends Component<Props> {
             },
             body: JSON.stringify({"email": this.state.textInputUsername, "password": this.state.textInputPassword})
         })
-            .then((response) => response.json())
+            .then((response) =>  {
+                // console.log('response', response);
+                return response.json();
+            })
             .then((responseJson) => {
+                // console.log('json', responseJson);
                 this.setState({email: responseJson["user"]["email"]});
                 this.setState({name: responseJson["user"]["name"]});
-                this.setState({credit: responseJson["user"]["credit"]});
+                this.setState({credit: String(responseJson["user"]["credit"])});
                 this.setState({role: responseJson["user"]["role"]});
+                this.setState({id: String(responseJson["user"]["id"])});
                 this.setState({status: responseJson["status"]});
                 // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 if (this.state.status === "OK") {
-                    let infos = '';
-                    infos += this.state.credit;
-                    infos += '-';
-                    infos += this.state.email;
-                    infos += '-';
-                    infos += this.state.name;
-                    infos += '-';
-                    infos += this.state.role;
-                    infos += '-';
-                    infos += this.state.status;
-                    this.setState({serializedUser: infos});
-                    this.loggedIn();
+                    this.signInAsync()
                     // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 } else {
                     let err = this.state.status;
@@ -60,13 +54,18 @@ export default class Login extends Component<Props> {
                             break;
                         default:
                             this.setState({errorConsole: "خطا: عدم ارتباط با سرور"});
-                    };
+                    }
+                    ;
                 }
             })
             .catch((error) => {
                 console.error(error);
             });
     }
+
+    static navigationOptions = {
+        header: null,
+    };
 
     state = {
         // Text inputs :
@@ -78,20 +77,12 @@ export default class Login extends Component<Props> {
         name: '',
         role: '',
         status: '',
+        id: '',
         serializedUser: '',
         // Screen parts :
         errorConsole: '',
         rememberMe: false,
         alertPopUpModal: false,
-    };
-
-    loggedIn() {
-        // this.loggedInU();
-        this.props.setLoggInModalVisible(this.state.serializedUser);
-
-    };
-    loggedInU() {
-        this.props.setLoggInModalVisibleU('lili');
     };
 
     render() {
@@ -148,29 +139,51 @@ export default class Login extends Component<Props> {
                             </View>
 
                             <TouchableOpacity style={styles.loginButtonStyle}
-                                              onPress={this.handlePress.bind(this)}>
+                                              onPress={this.handlePress}>
                                 <View style={styles.loginButtonFlex}>
                                     <Text style={styles.loginButtonText}>
                                         ورود
                                     </Text>
                                 </View>
                             </TouchableOpacity>
+                            <TouchableOpacity style={styles.loginButtonStyle}
+                                              onPress={this.signUp}>
+                                <View style={styles.loginButtonFlex}>
+                                    <Text style={styles.loginButtonText}>
+                                        ثبت نام
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={styles.footerContainer}>
+                    {/*<View style={styles.footerContainer}>*/}
 
-                        <TouchableOpacity onPress={this.loggedIn} style={styles.fingerprintButtonContainter}>
-                            <Image style={styles.icFingerprint}
-                                   source={require('./images/icFingerprint/icFingerprint.png')}/>
-                            <Text style={styles.fingerprintButtonText}>
-                                ورود با اثر انگشت
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                        {/*<TouchableOpacity onPress={this.loggedIn} style={styles.fingerprintButtonContainter}>*/}
+                            {/*<Image style={styles.icFingerprint}*/}
+                                   {/*source={require('./images/icFingerprint/icFingerprint.png')}/>*/}
+                            {/*<Text style={styles.fingerprintButtonText}>*/}
+                                {/*ورود با اثر انگشت*/}
+                            {/*</Text>*/}
+                        {/*</TouchableOpacity>*/}
+                    {/*</View>*/}
                 </View>
             </View>
         );
     }
+
+
+    signUp = () => {
+        this.props.navigation.navigate('SignUp');
+    };
+    signInAsync = async () => {
+        await AsyncStorage.setItem('credit', this.state.credit);
+        await AsyncStorage.setItem('email', this.state.email);
+        await AsyncStorage.setItem('name', this.state.name);
+        await AsyncStorage.setItem('role', this.state.role);
+        await AsyncStorage.setItem('status', this.state.status);
+        await AsyncStorage.setItem('id', this.state.id);
+        this.props.navigation.navigate('App');
+    };
 }
 
 const styles = StyleSheet.create({
