@@ -7,6 +7,8 @@ import {
     StyleSheet, Text, TouchableOpacity,
     View,
     Platform,
+    Alert,
+    ScrollView,
 } from 'react-native';
 import Modal from "react-native-modal";
 
@@ -131,6 +133,74 @@ export default class HomeScreen extends React.Component {
                             {/*</View>*/}
                         </View>
                     </View>
+                    <ScrollView style={styles.mainContainerScrollView} showsVerticalScrollIndicator={false}>
+                        <View style={styles.giftHistoryCard}>
+                            <View style={styles.giftHistoryCardContainer}>
+                                <Text style={styles.infoLabel}>
+                                    تاریخچه گیفت های دریافتی
+                                </Text>
+                                {this.state.historyListArr}
+                                <View style={styles.giftCard}>
+                                    <View style={styles.giftCardContainer}>
+                                        <Image
+                                            style={styles.icGift}
+                                            source={require('./images/icGift/icGift.png')}
+                                        />
+                                        <View style={styles.giftCardLabelCol}>
+                                            <Text style={styles.giftCardLabel}>
+                                                گیفت کارت ۱۰$ آیتونز
+                                            </Text>
+                                            <Text style={styles.giftCardCode}>
+                                                xxxx-xxxx-xxxx-xxxx
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={styles.giftCard}>
+                                    <View style={styles.giftCardContainer}>
+                                        <Image
+                                            style={styles.icGift}
+                                            source={require('./images/icGift/icGift.png')}
+                                        />
+                                        <View style={styles.giftCardLabelCol}>
+                                            <Text style={styles.giftCardLabel}>
+                                                گیفت کارت ۱۰$ آیتونز
+                                            </Text>
+                                            <Text style={styles.giftCardCode}>
+                                                xxxx-xxxx-xxxx-xxxx
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={styles.giftCard}>
+                                    <View style={styles.giftCardContainer}>
+                                        <Image
+                                            style={styles.icGift}
+                                            source={require('./images/icGift/icGift.png')}
+                                        />
+                                        <View style={styles.giftCardLabelCol}>
+                                            <Text style={styles.giftCardLabel}>
+                                                گیفت کارت ۱۰$ آیتونز
+                                            </Text>
+                                            <Text style={styles.giftCardCode}>
+                                                xxxx-xxxx-xxxx-xxxx
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+
+
+                                {/*<View style={styles.infoRow}>*/}
+                                {/*<Text style={styles.infoData}>*/}
+                                {/*{this.state.email}*/}
+                                {/*</Text>*/}
+                                {/*<Text style={styles.infoLabel}>*/}
+                                {/*ایمیل:*/}
+                                {/*</Text>*/}
+                                {/*</View>*/}
+                            </View>
+                        </View>
+                    </ScrollView>
                 </View>
             </View>
         );
@@ -138,15 +208,41 @@ export default class HomeScreen extends React.Component {
 
     loadGiftHistory = async () => {
         fetch('http://127.0.0.1:5000/api/gifthistory')
-            .then((response) => response.json())
+            .then((response) =>  {
+                console.log('response', response);
+                return response.json();
+            })
             .then((responseJson) => {
-                    this.setState({giftCode: responseJson["history"]["code"]});
-                    this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
-                    this.setState({gift_id: String(responseJson["history"]["gift_id"])});
-                    this.setState({date: responseJson["history"]["date"]});
-                    this.setState({description: responseJson["history"]["description"]});
-                    this.setState({giftDBId: String(responseJson["history"]["id"])});
-                    this.setState({giftHistoryStatus: responseJson["status"]});
+                    if (responseJson.status === 'ok') {
+                        console.log(responseJson.data.history);
+                        const historyListArr = responseJson.data.history.map(history => (
+                            <View key={history.id} style={styles.giftCard}>
+                                <View style={styles.giftCardContainer}>
+                                    <Image
+                                        style={styles.icGift}
+                                        source={require('./images/icGift/icGift.png')}
+                                    />
+                                    <View style={styles.giftCardLabelCol}>
+                                        <Text style={styles.giftCardLabel}>
+                                            {history.description}
+                                        </Text>
+                                        <Text style={styles.giftCardCode}>
+                                            {history.code}
+
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        ));
+                        this.setState({historyListArr: historyListArr});
+                    }
+                    // this.setState({giftCode: responseJson["history"]["code"]});
+                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
+                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
+                    // this.setState({date: responseJson["history"]["date"]});
+                    // this.setState({description: responseJson["history"]["description"]});
+                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
+                    // this.setState({giftHistoryStatus: responseJson["status"]});
                     // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 }
             )
@@ -175,10 +271,51 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    giftCardLabel: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'right',
+        paddingRight: 0,
+        color: 'white',
+    },
+    giftCardCode: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
+        textAlign: 'right',
+        paddingRight: 0,
+        color: 'white',
+    },
+    giftCardLabelCol: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+    },
+    icGift: {
+        width: 80,
+        height: 50
+    },
+    giftCard: {
+        width: '100%',
+        height: 70,
+        marginTop: 10,
+        borderRadius: 5,
+        backgroundColor: '#fc44c5'
+    },
+    giftCardContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 10,
+        paddingRight: 10
+    },
     profilePicture: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
+        width: 100,
+        height: 100,
+        borderRadius: 50,
         borderColor: '#ea24a3',
         borderWidth: 3,
     },
@@ -199,6 +336,7 @@ const styles = StyleSheet.create({
         color: '#ea24a3',
     },
     infoLabel: {
+        paddingBottom: 5,
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
@@ -229,6 +367,13 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
+    giftHistoryLabel: {
+        maxHeight: '100%',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+    },
     profileCardContainer: {
         margin: 10,
         flex: 1,
@@ -237,11 +382,28 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         backgroundColor: 'transparent',
     },
+    giftHistoryCardContainer: {
+        margin: 10,
+        // paddingTop: 0,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+        backgroundColor: 'transparent',
+    },
     profileCard: {
         width: '100%',
-        height: 150,
+        height: 120,
         borderRadius: 5,
         backgroundColor: '#fcc8f1'
+    },
+    giftHistoryCard: {
+        width: '100%',
+        maxHeight: '100%',
+        borderRadius: 5,
+        backgroundColor: '#fcc8f1',
+        marginTop: 10,
+        paddingTop: 0
     },
     mainContainer: {
         marginTop: 10,
@@ -252,6 +414,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'transparent',
+    },
+    mainContainerScrollView: {
+        width: '100%',
     },
     logoLabel: {
         // width: '100%',
