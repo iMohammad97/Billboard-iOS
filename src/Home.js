@@ -59,7 +59,7 @@ export default class HomeScreen extends React.Component {
                         <Text style={styles.logoLabel}>
                             Billboard
                         </Text>
-                        <TouchableOpacity onPress={() => this.setState({sidebarModal: true})}
+                        <TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}
                                           style={styles.TouchableOpacityboundLeft}>
                             <View style={styles.TouchableOpacityboundFlexLeft}>
                                 <Image style={styles.icSidebar}
@@ -71,38 +71,55 @@ export default class HomeScreen extends React.Component {
                 <View style={styles.mainContainer}>
                     <View style={styles.profileCard}>
                         <View style={styles.profileCardContainer}>
-                            <View style={styles.infoRow}>
-                                <Text style={styles.infoData}>
-                                    {this.state.name}
-                                </Text>
-                                <Text style={styles.infoLabel}>
-                                    نام:
-                                </Text>
+                            <View style={styles.imageRow}>
+                                <Image
+                                    source={require('./images/profile/profile.jpeg')}
+                                    style={styles.profilePicture}
+                                />
                             </View>
-                            <View style={styles.infoRow}>
-                                <Text style={styles.infoData}>
-                                    {this.state.role}
-                                </Text>
-                                <Text style={styles.infoLabel}>
-                                    سمت:
-                                </Text>
+                            <View style={styles.infoColumn}>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.infoData}>
+                                        {this.state.name}
+                                    </Text>
+                                    <View style={styles.infoLabel}>
+                                        <Image
+                                            source={require('./images/icProfile/icProfile.png')}
+                                            style={styles.infoIcon}
+                                        />
+                                    </View>
+                                </View>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.infoData}>
+                                        {this.state.role}
+                                    </Text>
+                                    <View style={styles.infoLabel}>
+                                        <Image
+                                            source={require('./images/icRole/icRole.png')}
+                                            style={styles.infoIcon}
+                                        />
+                                    </View>
+                                </View>
+                                <View style={styles.infoRow}>
+                                    <Text style={styles.infoData}>
+                                        {this.state.credit}
+                                    </Text>
+                                    <View style={styles.infoLabel}>
+                                        <Image
+                                            source={require('./images/icCredit/icCredit.png')}
+                                            style={styles.infoIcon}
+                                        />
+                                    </View>
+                                </View>
                             </View>
-                            <View style={styles.infoRow}>
-                                <Text style={styles.infoData}>
-                                    {this.state.credit}
-                                </Text>
-                                <Text style={styles.infoLabel}>
-                                    اعتبار:
-                                </Text>
-                            </View>
-                            <View style={styles.infoRow}>
-                                <Text style={styles.infoData}>
-                                    {this.state.email}
-                                </Text>
-                                <Text style={styles.infoLabel}>
-                                    ایمیل:
-                                </Text>
-                            </View>
+                            {/*<View style={styles.infoRow}>*/}
+                                {/*<Text style={styles.infoData}>*/}
+                                    {/*{this.state.email}*/}
+                                {/*</Text>*/}
+                                {/*<Text style={styles.infoLabel}>*/}
+                                    {/*ایمیل:*/}
+                                {/*</Text>*/}
+                            {/*</View>*/}
                         </View>
                     </View>
                 </View>
@@ -130,6 +147,18 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    profilePicture: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        borderColor: '#ea24a3',
+        borderWidth: 2,
+
+    },
+    infoIcon: {
+        width: 30,
+        height: 30
+    },
     sideIcon: {
         width: 20,
         height: 20
@@ -149,6 +178,22 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         color: '#ea24a3',
     },
+    infoColumn: {
+        width: '50%',
+        // borderWidth: 5,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    },
+    imageRow: {
+        width: '50%',
+        // borderWidth: 5,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     infoRow: {
         height: 30,
         // borderWidth: 5,
@@ -160,14 +205,14 @@ const styles = StyleSheet.create({
     profileCardContainer: {
         margin: 20,
         flex: 1,
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'stretch',
         backgroundColor: 'transparent',
     },
     profileCard: {
         width: '100%',
-        height: 200,
+        height: 150,
         borderRadius: 5,
         backgroundColor: '#fcc8f1'
     },
