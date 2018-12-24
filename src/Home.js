@@ -14,6 +14,7 @@ export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.loadUser();
+        this.loadGiftHistory();
     };
 
     state = {
@@ -27,13 +28,21 @@ export default class HomeScreen extends React.Component {
         role: '',
         status: '',
         id: '',
+        // API fetched data GIFTHISTORY
+        giftCode: '',
+        giftUser_id: '',
+        gift_id: '',
+        date: '',
+        description: '',
+        giftDBId: '',
+        giftHistoryStatus: '',
     };
 
     static navigationOptions = {
         header: null,
         title: 'Billboard',
         drawerLabel: 'Home',
-        drawerIcon: ({ tintColor }) => (
+        drawerIcon: ({tintColor}) => (
             <Image
                 source={require('./images/icHome/icHome.png')}
                 style={[styles.sideIcon, {tintColor: tintColor}]}
@@ -73,7 +82,7 @@ export default class HomeScreen extends React.Component {
                         <View style={styles.profileCardContainer}>
                             <View style={styles.imageRow}>
                                 <Image
-                                    source={require('./images/profile/profile.jpeg')}
+                                    source={require('./images/profile/profile.jpg')}
                                     style={styles.profilePicture}
                                 />
                             </View>
@@ -113,18 +122,37 @@ export default class HomeScreen extends React.Component {
                                 </View>
                             </View>
                             {/*<View style={styles.infoRow}>*/}
-                                {/*<Text style={styles.infoData}>*/}
-                                    {/*{this.state.email}*/}
-                                {/*</Text>*/}
-                                {/*<Text style={styles.infoLabel}>*/}
-                                    {/*ایمیل:*/}
-                                {/*</Text>*/}
+                            {/*<Text style={styles.infoData}>*/}
+                            {/*{this.state.email}*/}
+                            {/*</Text>*/}
+                            {/*<Text style={styles.infoLabel}>*/}
+                            {/*ایمیل:*/}
+                            {/*</Text>*/}
                             {/*</View>*/}
                         </View>
                     </View>
                 </View>
             </View>
         );
+    };
+
+    loadGiftHistory = async () => {
+        fetch('http://127.0.0.1:5000/api/gifthistory')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                    this.setState({giftCode: responseJson["history"]["code"]});
+                    this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
+                    this.setState({gift_id: String(responseJson["history"]["gift_id"])});
+                    this.setState({date: responseJson["history"]["date"]});
+                    this.setState({description: responseJson["history"]["description"]});
+                    this.setState({giftDBId: String(responseJson["history"]["id"])});
+                    this.setState({giftHistoryStatus: responseJson["status"]});
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                }
+            )
+            .catch((error) => {
+                // console.error(error);
+            });
     };
 
     loadUser = async () => {
@@ -148,12 +176,11 @@ export default class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
     profilePicture: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 120,
+        height: 120,
+        borderRadius: 60,
         borderColor: '#ea24a3',
-        borderWidth: 2,
-
+        borderWidth: 3,
     },
     infoIcon: {
         width: 30,
@@ -203,7 +230,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     profileCardContainer: {
-        margin: 20,
+        margin: 10,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -217,9 +244,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fcc8f1'
     },
     mainContainer: {
-        marginTop: 20,
-        marginRight: 20,
-        marginLeft: 20,
+        marginTop: 10,
+        marginRight: 10,
+        marginLeft: 10,
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
