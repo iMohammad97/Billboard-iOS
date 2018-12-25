@@ -29,7 +29,7 @@ export default class HomeScreen extends React.Component {
         name: '',
         role: '',
         status: '',
-        id: '',
+        userId: '',
         // API fetched data GIFTHISTORY
         giftCode: '',
         giftUser_id: '',
@@ -140,56 +140,6 @@ export default class HomeScreen extends React.Component {
                                     تاریخچه گیفت های دریافتی
                                 </Text>
                                 {this.state.historyListArr}
-                                <View style={styles.giftCard}>
-                                    <View style={styles.giftCardContainer}>
-                                        <Image
-                                            style={styles.icGift}
-                                            source={require('./images/icGift/icGift.png')}
-                                        />
-                                        <View style={styles.giftCardLabelCol}>
-                                            <Text style={styles.giftCardLabel}>
-                                                گیفت کارت ۱۰$ آیتونز
-                                            </Text>
-                                            <Text style={styles.giftCardCode}>
-                                                xxxx-xxxx-xxxx-xxxx
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={styles.giftCard}>
-                                    <View style={styles.giftCardContainer}>
-                                        <Image
-                                            style={styles.icGift}
-                                            source={require('./images/icGift/icGift.png')}
-                                        />
-                                        <View style={styles.giftCardLabelCol}>
-                                            <Text style={styles.giftCardLabel}>
-                                                گیفت کارت ۱۰$ آیتونز
-                                            </Text>
-                                            <Text style={styles.giftCardCode}>
-                                                xxxx-xxxx-xxxx-xxxx
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={styles.giftCard}>
-                                    <View style={styles.giftCardContainer}>
-                                        <Image
-                                            style={styles.icGift}
-                                            source={require('./images/icGift/icGift.png')}
-                                        />
-                                        <View style={styles.giftCardLabelCol}>
-                                            <Text style={styles.giftCardLabel}>
-                                                گیفت کارت ۱۰$ آیتونز
-                                            </Text>
-                                            <Text style={styles.giftCardCode}>
-                                                xxxx-xxxx-xxxx-xxxx
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-
-
                                 {/*<View style={styles.infoRow}>*/}
                                 {/*<Text style={styles.infoData}>*/}
                                 {/*{this.state.email}*/}
@@ -207,16 +157,23 @@ export default class HomeScreen extends React.Component {
     };
 
     loadGiftHistory = async () => {
-        fetch('http://127.0.0.1:5000/api/gifthistory')
-            .then((response) =>  {
-                console.log('response', response);
+        fetch('http://127.0.0.1:5000/api/gifthistory', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                console.log('respoooonse', response);
                 return response.json();
             })
             .then((responseJson) => {
-                    if (responseJson.status === 'ok') {
-                        console.log(responseJson.data.history);
-                        const historyListArr = responseJson.data.history.map(history => (
-                            <View key={history.id} style={styles.giftCard}>
+                    if (responseJson.status === 'OK') {
+                        console.log("respoooooonse", responseJson.history);
+                        const historyListArrr = responseJson.history.map(historyItem => (
+                            <View key={historyItem.id} style={styles.giftCard}>
                                 <View style={styles.giftCardContainer}>
                                     <Image
                                         style={styles.icGift}
@@ -224,17 +181,16 @@ export default class HomeScreen extends React.Component {
                                     />
                                     <View style={styles.giftCardLabelCol}>
                                         <Text style={styles.giftCardLabel}>
-                                            {history.description}
+                                            گیفت کارت {historyItem.description} آیتونز
                                         </Text>
                                         <Text style={styles.giftCardCode}>
-                                            {history.code}
-
+                                            {historyItem.code}
                                         </Text>
                                     </View>
                                 </View>
                             </View>
                         ));
-                        this.setState({historyListArr: historyListArr});
+                        this.setState({historyListArr: historyListArrr});
                     }
                     // this.setState({giftCode: responseJson["history"]["code"]});
                     // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
@@ -258,7 +214,7 @@ export default class HomeScreen extends React.Component {
             this.setState({name: await AsyncStorage.getItem('name')});
             this.setState({role: await AsyncStorage.getItem('role')});
             this.setState({status: await AsyncStorage.getItem('status')});
-            this.setState({id: await AsyncStorage.getItem('id')});
+            this.setState({userId: await AsyncStorage.getItem('id')});
         } catch (error) {
             // Error retrieving data
         }
