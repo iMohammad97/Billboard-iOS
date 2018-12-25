@@ -7,6 +7,8 @@ import {
     StyleSheet, Text, TouchableOpacity,
     View,
     Platform,
+    Alert,
+    ScrollView,
 } from 'react-native';
 import Modal from "react-native-modal";
 
@@ -14,6 +16,7 @@ export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.loadUser();
+        this.loadGiftHistory();
     };
 
     state = {
@@ -26,14 +29,22 @@ export default class HomeScreen extends React.Component {
         name: '',
         role: '',
         status: '',
-        id: '',
+        userId: '',
+        // API fetched data GIFTHISTORY
+        giftCode: '',
+        giftUser_id: '',
+        gift_id: '',
+        date: '',
+        description: '',
+        giftDBId: '',
+        giftHistoryStatus: '',
     };
 
     static navigationOptions = {
         header: null,
         title: 'Billboard',
         drawerLabel: 'Home',
-        drawerIcon: ({ tintColor }) => (
+        drawerIcon: ({tintColor}) => (
             <Image
                 source={require('./images/icHome/icHome.png')}
                 style={[styles.sideIcon, {tintColor: tintColor}]}
@@ -73,7 +84,7 @@ export default class HomeScreen extends React.Component {
                         <View style={styles.profileCardContainer}>
                             <View style={styles.imageRow}>
                                 <Image
-                                    source={require('./images/profile/profile.jpeg')}
+                                    source={require('./images/profile/profile.jpg')}
                                     style={styles.profilePicture}
                                 />
                             </View>
@@ -113,18 +124,87 @@ export default class HomeScreen extends React.Component {
                                 </View>
                             </View>
                             {/*<View style={styles.infoRow}>*/}
-                                {/*<Text style={styles.infoData}>*/}
-                                    {/*{this.state.email}*/}
-                                {/*</Text>*/}
-                                {/*<Text style={styles.infoLabel}>*/}
-                                    {/*ایمیل:*/}
-                                {/*</Text>*/}
+                            {/*<Text style={styles.infoData}>*/}
+                            {/*{this.state.email}*/}
+                            {/*</Text>*/}
+                            {/*<Text style={styles.infoLabel}>*/}
+                            {/*ایمیل:*/}
+                            {/*</Text>*/}
                             {/*</View>*/}
                         </View>
                     </View>
+                    <ScrollView style={styles.mainContainerScrollView} showsVerticalScrollIndicator={false}>
+                        <View style={styles.giftHistoryCard}>
+                            <View style={styles.giftHistoryCardContainer}>
+                                <Text style={styles.infoLabel}>
+                                    تاریخچه گیفت های دریافتی
+                                </Text>
+                                {this.state.historyListArr}
+                                {/*<View style={styles.infoRow}>*/}
+                                {/*<Text style={styles.infoData}>*/}
+                                {/*{this.state.email}*/}
+                                {/*</Text>*/}
+                                {/*<Text style={styles.infoLabel}>*/}
+                                {/*ایمیل:*/}
+                                {/*</Text>*/}
+                                {/*</View>*/}
+                            </View>
+                        </View>
+                    </ScrollView>
                 </View>
             </View>
         );
+    };
+
+    loadGiftHistory = async () => {
+        fetch('http://127.0.0.1:5000/api/gifthistory', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                console.log('respoooonse', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                    if (responseJson.status === 'OK') {
+                        console.log("respoooooonse", responseJson.history);
+                        const historyListArrr = responseJson.history.map(historyItem => (
+                            <View key={historyItem.id} style={styles.giftCard}>
+                                <View style={styles.giftCardContainer}>
+                                    <Image
+                                        style={styles.icGift}
+                                        source={require('./images/icGift/icGift.png')}
+                                    />
+                                    <View style={styles.giftCardLabelCol}>
+                                        <Text style={styles.giftCardLabel}>
+                                            گیفت کارت {historyItem.description} آیتونز
+                                        </Text>
+                                        <Text style={styles.giftCardCode}>
+                                            {historyItem.code}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        ));
+                        this.setState({historyListArr: historyListArrr});
+                    }
+                    // this.setState({giftCode: responseJson["history"]["code"]});
+                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
+                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
+                    // this.setState({date: responseJson["history"]["date"]});
+                    // this.setState({description: responseJson["history"]["description"]});
+                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
+                    // this.setState({giftHistoryStatus: responseJson["status"]});
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                }
+            )
+            .catch((error) => {
+                // console.error(error);
+            });
     };
 
     loadUser = async () => {
@@ -134,7 +214,7 @@ export default class HomeScreen extends React.Component {
             this.setState({name: await AsyncStorage.getItem('name')});
             this.setState({role: await AsyncStorage.getItem('role')});
             this.setState({status: await AsyncStorage.getItem('status')});
-            this.setState({id: await AsyncStorage.getItem('id')});
+            this.setState({userId: await AsyncStorage.getItem('id')});
         } catch (error) {
             // Error retrieving data
         }
@@ -147,13 +227,53 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    giftCardLabel: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'right',
+        paddingRight: 0,
+        color: 'white',
+    },
+    giftCardCode: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
+        textAlign: 'right',
+        paddingRight: 0,
+        color: 'white',
+    },
+    giftCardLabelCol: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+    },
+    icGift: {
+        width: 80,
+        height: 50
+    },
+    giftCard: {
+        width: '100%',
+        height: 70,
+        marginTop: 10,
+        borderRadius: 5,
+        backgroundColor: '#fc44c5'
+    },
+    giftCardContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 10,
+        paddingRight: 10
+    },
     profilePicture: {
         width: 100,
         height: 100,
         borderRadius: 50,
         borderColor: '#ea24a3',
-        borderWidth: 2,
-
+        borderWidth: 3,
     },
     infoIcon: {
         width: 30,
@@ -172,6 +292,7 @@ const styles = StyleSheet.create({
         color: '#ea24a3',
     },
     infoLabel: {
+        paddingBottom: 5,
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
@@ -202,29 +323,56 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
+    giftHistoryLabel: {
+        maxHeight: '100%',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+    },
     profileCardContainer: {
-        margin: 20,
+        margin: 10,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'stretch',
         backgroundColor: 'transparent',
     },
+    giftHistoryCardContainer: {
+        margin: 10,
+        // paddingTop: 0,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+        backgroundColor: 'transparent',
+    },
     profileCard: {
         width: '100%',
-        height: 150,
+        height: 120,
         borderRadius: 5,
         backgroundColor: '#fcc8f1'
     },
+    giftHistoryCard: {
+        width: '100%',
+        maxHeight: '100%',
+        borderRadius: 5,
+        backgroundColor: '#fcc8f1',
+        marginTop: 10,
+        paddingTop: 0
+    },
     mainContainer: {
-        marginTop: 20,
-        marginRight: 20,
-        marginLeft: 20,
+        marginTop: 10,
+        marginRight: 10,
+        marginLeft: 10,
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'transparent',
+    },
+    mainContainerScrollView: {
+        width: '100%',
     },
     logoLabel: {
         // width: '100%',

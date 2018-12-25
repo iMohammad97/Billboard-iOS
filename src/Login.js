@@ -25,6 +25,7 @@ export default class LoginScreen extends Component<Props> {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({"email": this.state.textInputUsername, "password": this.state.textInputPassword})
         })
             .then((response) =>  {
