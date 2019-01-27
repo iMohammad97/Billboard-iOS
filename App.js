@@ -13,6 +13,7 @@ import {
 import LoginScreen from "./src/Login.js";
 import SignUpScreen from "./src/Signup.js";
 import HomeScreen from "./src/Home.js";
+import GiftShop from "./src/GiftShop.js";
 import {createStackNavigator, createSwitchNavigator, createAppContainer, createDrawerNavigator, DrawerItems} from 'react-navigation';
 
 
@@ -42,11 +43,12 @@ class AuthLoadingScreen extends React.Component {
     }
 }
 
-const AppStack = createStackNavigator({Home: HomeScreen});
+const AppStack = createStackNavigator({Home: HomeScreen, GiftShop: GiftShop});
 const AuthStack = createStackNavigator({LogIn: LoginScreen, SignUp: SignUpScreen});
 const drw = createDrawerNavigator(
     {
         Home: HomeScreen,
+        GiftShop: GiftShop
     }, {
         drawerPosition: 'right',
     });
