@@ -142,9 +142,19 @@ export default class HomeScreen extends React.Component {
                     </View>
                     <ScrollView style={styles.mainContainerScrollView} showsVerticalScrollIndicator={false}>
                         <View style={styles.giftHistory1Card}>
-                            <Text style={styles.infoLabel1}>
-                                تاریخچه گیفت های دریافتی
-                            </Text>
+                            <View style={styles.giftHistoryCardBarContainer}>
+                                <TouchableOpacity style={styles.refreshButton}
+                                                  onPress={() => this.loadGiftHistory()}
+                                >
+                                    <Image
+                                        source={require('./images/icRefresh/icRefresh.png')}
+                                        style={styles.refreshIcon}
+                                    />
+                                </TouchableOpacity>
+                                <Text style={styles.infoLabel1}>
+                                    تاریخچه گیفت های دریافتی
+                                </Text>
+                            </View>
                             <View style={styles.giftHistoryCardContainer}>
                                 {this.state.historyListArr}
                                 {/*<View style={styles.infoRow}>*/}
@@ -280,6 +290,11 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    refreshButton: {
+        width: 25,
+        height: 25,
+        justifyContent: 'center',
+    },
     giftHistory1Card: {
         width: '100%',
         borderRadius: 5,
@@ -339,6 +354,10 @@ const styles = StyleSheet.create({
     infoIcon: {
         width: 30,
         height: 30
+    },
+    refreshIcon: {
+        width: 25,
+        height: 25
     },
     sideIcon: {
         width: 25,
@@ -419,6 +438,13 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
         backgroundColor: 'transparent',
+    },
+    giftHistoryCardBarContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 10
     },
     profileCard: {
         width: '100%',

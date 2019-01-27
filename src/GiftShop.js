@@ -147,9 +147,19 @@ export default class GiftSHop extends React.Component {
                             </View>
                         </View>
                         <View style={styles.giftHistory1Card}>
-                            <Text style={styles.infoLabel1}>
-                                تاریخچه گیفت های دریافتی
-                            </Text>
+                            <View style={styles.giftHistoryCardBarContainer}>
+                                <TouchableOpacity style={styles.refreshButton}
+                                                  onPress={() => this.loadGiftHistory()}
+                                >
+                                    <Image
+                                        source={require('./images/icRefresh/icRefresh.png')}
+                                        style={styles.refreshIcon}
+                                    />
+                                </TouchableOpacity>
+                                <Text style={styles.infoLabel1}>
+                                    تاریخچه گیفت های دریافتی
+                                </Text>
+                            </View>
                             <View style={styles.giftHistoryCardContainer1}>
                                 {this.state.historyListArr}
                                 {/*<View style={styles.infoRow}>*/}
@@ -185,7 +195,6 @@ export default class GiftSHop extends React.Component {
             .then((responseJson) => {
                 // console.log('json', responseJson);
                 if (responseJson.status === 'OK') {
-                    this.loadGiftHistory();
                 }
             })
             .catch((error) => {
@@ -339,6 +348,17 @@ export default class GiftSHop extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    refreshIcon: {
+        width: 25,
+        height: 25
+    },
+    giftHistoryCardBarContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 10
+    },
     infoLabel1: {
         margin: 10,
         marginBottom: 0,
@@ -354,7 +374,12 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'center',
-        color: 'white',
+        color: '#ea24a3',
+    },
+    refreshButton: {
+        width: 25,
+        height: 25,
+        justifyContent: 'center',
     },
     buyButton: {
         width: '100%',
