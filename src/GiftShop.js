@@ -18,6 +18,7 @@ export default class GiftSHop extends React.Component {
         super(props);
         this.loadUser();
         this.loadGiftHistory();
+        this.loadGiftShop();
     };
 
     state = {
@@ -83,12 +84,6 @@ export default class GiftSHop extends React.Component {
                 <View style={styles.mainContainer}>
                     <View style={styles.profileCard}>
                         <View style={styles.profileCardContainer}>
-                            <View style={styles.imageRow}>
-                                <Image
-                                    source={require('./images/profile/profile.jpg')}
-                                    style={styles.profilePicture}
-                                />
-                            </View>
                             <View style={styles.infoColumn}>
                                 <View style={styles.infoRow}>
                                     <Text style={styles.infoData}>
@@ -138,8 +133,24 @@ export default class GiftSHop extends React.Component {
                         <View style={styles.giftHistoryCard}>
                             <View style={styles.giftHistoryCardContainer}>
                                 <Text style={styles.infoLabel}>
-                                    تاریخچه گیفت های دریافتی
+                                    گیفت شاپ
                                 </Text>
+                                    {this.state.giftShopListArr}
+                                    {/*<View style={styles.infoRow}>*/}
+                                    {/*<Text style={styles.infoData}>*/}
+                                    {/*{this.state.email}*/}
+                                    {/*</Text>*/}
+                                    {/*<Text style={styles.infoLabel}>*/}
+                                    {/*ایمیل:*/}
+                                    {/*</Text>*/}
+                                    {/*</View>*/}
+                            </View>
+                        </View>
+                        <View style={styles.giftHistory1Card}>
+                            <Text style={styles.infoLabel1}>
+                                تاریخچه گیفت های دریافتی
+                            </Text>
+                            <View style={styles.giftHistoryCardContainer1}>
                                 {this.state.historyListArr}
                                 {/*<View style={styles.infoRow}>*/}
                                 {/*<Text style={styles.infoData}>*/}
@@ -155,6 +166,106 @@ export default class GiftSHop extends React.Component {
                 </View>
             </View>
         );
+    };
+
+    buyGift = async (giftshop) => {
+        // console.log('rgiiiiiiiiiiiid', giftshop.id)
+        fetch('http://127.0.0.1:5000/api/shoppingresult/'+giftshop.id, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) =>  {
+                // console.log('response', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                // console.log('json', responseJson);
+                if (responseJson.status === 'OK') {
+                    this.loadGiftHistory();
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    loadGiftShop = async () => {
+        fetch('http://127.0.0.1:5000/api/giftshop', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                // console.log('respoooonse', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                    if (responseJson.status === 'OK') {
+
+                        console.log("respoooooonse", responseJson.history);
+                        const giftShopListArrr = responseJson.gifts.map(giftShopItem => (
+                            <View key={giftShopItem.id} style={styles.giftCardShop}>
+                                <View style={styles.giftCardShopContainer}>
+                                    <View style={styles.giftCardStyle}>
+                                        <View style={styles.giftCardContainer}>
+                                            <Image
+                                                style={styles.icGiftShop}
+                                                source={require('./images/icGift/icGift.png')}
+                                            />
+                                            <View style={styles.giftCardLabelCol}>
+                                                <Text style={styles.giftCardShopLabel}>
+                                                    گیفت کارت {giftShopItem.description} آیتونز
+                                                </Text>
+                                                <View style={styles.infoRow}>
+                                                    <Text style={styles.giftCardCode}>
+                                                        {giftShopItem.cost}
+                                                    </Text>
+                                                    <View style={styles.infoLabelShop}>
+                                                        <Image
+                                                            source={require('./images/icCreditWhite/icCreditWhite.png')}
+                                                            style={styles.infoIcon}
+                                                        />
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <View style={styles.giftCardBuyStyle}>
+                                        <View style={styles.giftCardBuyContainer}>
+                                            <TouchableOpacity style={styles.buyButton}
+                                                              onPress={() => this.buyGift(giftShopItem)}
+                                            >
+                                                <Text style={styles.buyButtonLabel}>
+                                                    خرید
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        ));
+                        this.setState({giftShopListArr: giftShopListArrr});
+                    }
+                    // this.setState({giftCode: responseJson["history"]["code"]});
+                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
+                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
+                    // this.setState({date: responseJson["history"]["date"]});
+                    // this.setState({description: responseJson["history"]["description"]});
+                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
+                    // this.setState({giftHistoryStatus: responseJson["status"]});
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                }
+            )
+            .catch((error) => {
+                // console.error(error);
+            });
     };
 
     loadGiftHistory = async () => {
@@ -228,16 +339,48 @@ export default class GiftSHop extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    giftCardLabel: {
+    infoLabel1: {
+        margin: 10,
+        marginBottom: 0,
+        paddingBottom: 5,
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'right',
+        color: '#ea24a3',
+    },
+    buyButtonLabel: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'center',
+        color: 'white',
+    },
+    buyButton: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
+        backgroundColor: '#fcc8f1',
+        justifyContent: 'center',
+    },
+    giftCardLabel: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanBold(FaNum)",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'right',
         paddingRight: 0,
         color: 'white',
     },
+    giftCardShopLabel: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanBold(FaNum)",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'right',
+        paddingTop: 10,
+        color: 'white',
+    },
     giftCardCode: {
-        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanRegular(FaNum)",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         textAlign: 'right',
@@ -254,6 +397,10 @@ const styles = StyleSheet.create({
         width: 80,
         height: 50
     },
+    icGiftShop: {
+        width: 120,
+        height: 75
+    },
     giftCard: {
         width: '100%',
         height: 70,
@@ -261,9 +408,39 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#fc44c5'
     },
+    giftCardShop: {
+        width: '100%',
+        height: 150,
+        marginTop: 10,
+        borderRadius: 5,
+        backgroundColor: '#fc44c5'
+    },
     giftCardContainer: {
         flex: 1,
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+    giftCardStyle: {
+        width: '100%',
+        height: '70%'
+    },
+    giftCardBuyStyle: {
+        width: '100%',
+        height: '30%'
+    },
+    giftCardBuyContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 5,
+    },
+    giftCardShopContainer: {
+        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingLeft: 10,
@@ -285,7 +462,7 @@ const styles = StyleSheet.create({
         height: 25
     },
     infoData: {
-        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanRegular(FaNum)",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         textAlign: 'right',
@@ -300,13 +477,22 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         color: '#ea24a3',
     },
+    infoLabelShop: {
+        paddingBottom: 5,
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'right',
+        color: '#ea24a3',
+        marginLeft: 8
+    },
     infoColumn: {
-        width: '50%',
+        width: '100%',
         // borderWidth: 5,
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     imageRow: {
         width: '50%',
@@ -317,7 +503,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     infoRow: {
-        height: 30,
+        height: 50,
         // borderWidth: 5,
         flex: 1,
         flexDirection: 'row',
@@ -341,6 +527,7 @@ const styles = StyleSheet.create({
     },
     giftHistoryCardContainer: {
         margin: 10,
+        maxHeight: '100%',
         // paddingTop: 0,
         flex: 1,
         flexDirection: 'column',
@@ -348,19 +535,37 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         backgroundColor: 'transparent',
     },
+    giftHistoryCardContainer1: {
+        margin: 10,
+        marginTop: 0,
+        maxHeight: '100%',
+        // paddingTop: 0,
+        flex: 1,
+        flexDirection: 'column-reverse',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+        backgroundColor: 'transparent',
+    },
     profileCard: {
         width: '100%',
-        height: 120,
+        height: 50,
         borderRadius: 5,
         backgroundColor: '#fcc8f1'
     },
     giftHistoryCard: {
         width: '100%',
-        maxHeight: '100%',
         borderRadius: 5,
         backgroundColor: '#fcc8f1',
         marginTop: 10,
         paddingTop: 0
+    },
+    giftHistory1Card: {
+        width: '100%',
+        borderRadius: 5,
+        backgroundColor: '#fcc8f1',
+        marginTop: 10,
+        paddingTop: 0,
+        marginBottom: 30
     },
     mainContainer: {
         marginTop: 10,
@@ -373,6 +578,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     mainContainerScrollView: {
+        width: '100%',
+    },
+    giftShopContainerScrollView: {
         width: '100%',
     },
     logoLabel: {

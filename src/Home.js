@@ -20,6 +20,10 @@ export default class HomeScreen extends React.Component {
         this.loadGiftHistory();
     };
 
+    componentWillMount(){
+        // this.loadGiftHistory();
+    };
+
     state = {
         loginView: false,
         signupView: true,
@@ -52,9 +56,11 @@ export default class HomeScreen extends React.Component {
             />
         ),
     };
-
-
+    componentDidUpdate() {
+        // this.loadGiftHistory();
+    };
     render() {
+        // this.loadGiftHistory();
         return (
             <View style={{height: '100%', width: '100%'}}>
                 <StatusBar hidden/>
@@ -135,11 +141,11 @@ export default class HomeScreen extends React.Component {
                         </View>
                     </View>
                     <ScrollView style={styles.mainContainerScrollView} showsVerticalScrollIndicator={false}>
-                        <View style={styles.giftHistoryCard}>
+                        <View style={styles.giftHistory1Card}>
+                            <Text style={styles.infoLabel1}>
+                                تاریخچه گیفت های دریافتی
+                            </Text>
                             <View style={styles.giftHistoryCardContainer}>
-                                <Text style={styles.infoLabel}>
-                                    تاریخچه گیفت های دریافتی
-                                </Text>
                                 {this.state.historyListArr}
                                 {/*<View style={styles.infoRow}>*/}
                                 {/*<Text style={styles.infoData}>*/}
@@ -156,6 +162,52 @@ export default class HomeScreen extends React.Component {
             </View>
         );
     };
+
+    infoUpdate = async () => {
+        fetch('http://127.0.0.1:5000/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({"email": this.state.textInputUsername, "password": this.state.textInputPassword})
+        })
+            .then((response) =>  {
+                // console.log('response', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                // console.log('json', responseJson);
+                this.setState({email: responseJson["user"]["email"]});
+                this.setState({name: responseJson["user"]["name"]});
+                this.setState({credit: String(responseJson["user"]["credit"])});
+                this.setState({role: responseJson["user"]["role"]});
+                this.setState({id: String(responseJson["user"]["id"])});
+                this.setState({status: responseJson["status"]});
+                // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                if (this.state.status === "OK") {
+                    this.signInAsync()
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                } else {
+                    let err = this.state.status;
+                    switch (err) {
+                        case "password incorrect":
+                            this.setState({errorConsole: "خطا:‌ رمز عبور اشتباه است"});
+                            break;
+                        case "user not found":
+                            this.setState({errorConsole: "خطا: نام کاربری یافت نشد"});
+                            break;
+                        default:
+                            this.setState({errorConsole: "خطا: عدم ارتباط با سرور"});
+                    }
+                    ;
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
 
     loadGiftHistory = async () => {
         fetch('http://127.0.0.1:5000/api/gifthistory', {
@@ -228,8 +280,16 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    giftHistory1Card: {
+        width: '100%',
+        borderRadius: 5,
+        backgroundColor: '#fcc8f1',
+        marginTop: 10,
+        paddingTop: 0,
+        marginBottom: 30
+    },
     giftCardLabel: {
-        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanBold(FaNum)",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'right',
@@ -237,7 +297,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     giftCardCode: {
-        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanRegular(FaNum)",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         textAlign: 'right',
@@ -285,7 +345,7 @@ const styles = StyleSheet.create({
         height: 25
     },
     infoData: {
-        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanRegular(FaNum)",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         textAlign: 'right',
@@ -293,6 +353,16 @@ const styles = StyleSheet.create({
         color: '#ea24a3',
     },
     infoLabel: {
+        paddingBottom: 5,
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'right',
+        color: '#ea24a3',
+    },
+    infoLabel1: {
+        margin: 10,
+        marginBottom: 0,
         paddingBottom: 5,
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
         fontSize: 17,
@@ -341,9 +411,11 @@ const styles = StyleSheet.create({
     },
     giftHistoryCardContainer: {
         margin: 10,
+        marginTop: 0,
+        maxHeight: '100%',
         // paddingTop: 0,
         flex: 1,
-        flexDirection: 'column',
+        flexDirection: 'column-reverse',
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
         backgroundColor: 'transparent',
