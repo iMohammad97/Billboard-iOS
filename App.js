@@ -43,6 +43,30 @@ class AuthLoadingScreen extends React.Component {
     }
 }
 
+const DrawerContent = (props) => (
+    <View>
+        <View
+            style={{
+                // backgroundColor: '#f50057',
+                height: 200,
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            <View style={styles.profileCard}>
+                <View style={styles.profileCardContainer}>
+                    <Text style={styles.logoLabel}>
+                        Billboard
+                    </Text>
+                    <Text style={styles.labelBarStyle}>
+                        پلتفرم تبلیغات دیجیتال
+                    </Text>
+                </View>
+            </View>
+        </View>
+        <DrawerItems {...props} />
+    </View>
+);
 const AppStack = createStackNavigator({Home: HomeScreen, GiftShop: GiftShop});
 const AuthStack = createStackNavigator({LogIn: LoginScreen, SignUp: SignUpScreen});
 const drw = createDrawerNavigator(
@@ -51,6 +75,20 @@ const drw = createDrawerNavigator(
         GiftShop: GiftShop
     }, {
         drawerPosition: 'right',
+        drawerBackgroundColor: '#fcc8f1',
+        contentOptions: {
+            activeTintColor: '#ea24a3',
+            labelStyle: {
+                fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+                fontSize: 15,
+                fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+                textAlign: 'right',
+            },
+            itemStyle: {
+                flexDirection: 'row-reverse'
+            }
+        },
+        contentComponent: DrawerContent,
     });
 export default createAppContainer(
     createSwitchNavigator(
@@ -71,5 +109,33 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    profileCard: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#fc44c5'
+    },
+    profileCardContainer: {
+        margin: 10,
+        marginTop: 50,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    labelBarStyle: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 15,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'center',
+        color: 'white',
+    },
+    logoLabel: {
+        fontFamily: Platform.OS === 'ios' ? "Freestyle Script" : "FREESCPT",
+        fontSize: 80,
+        fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
+        borderColor: 'green',
+        textAlign: 'center',
+        color: 'white',
     },
 });

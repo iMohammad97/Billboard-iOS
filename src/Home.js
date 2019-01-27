@@ -11,6 +11,7 @@ import {
     ScrollView,
 } from 'react-native';
 import Modal from "react-native-modal";
+import { DrawerActions } from 'react-navigation';
 
 export default class HomeScreen extends React.Component {
     constructor(props) {
@@ -43,7 +44,7 @@ export default class HomeScreen extends React.Component {
     static navigationOptions = {
         header: null,
         title: 'Billboard',
-        drawerLabel: 'Home',
+        drawerLabel: 'خانه',
         drawerIcon: ({tintColor}) => (
             <Image
                 source={require('./images/icHome/icHome.png')}
@@ -70,7 +71,7 @@ export default class HomeScreen extends React.Component {
                         <Text style={styles.logoLabel}>
                             Billboard
                         </Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}
+                        <TouchableOpacity onPress={() => this.props.navigation.dispatch(DrawerActions.openDrawer())}
                                           style={styles.TouchableOpacityboundLeft}>
                             <View style={styles.TouchableOpacityboundFlexLeft}>
                                 <Image style={styles.icSidebar}
@@ -280,8 +281,8 @@ const styles = StyleSheet.create({
         height: 30
     },
     sideIcon: {
-        width: 20,
-        height: 20
+        width: 25,
+        height: 25
     },
     infoData: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
