@@ -119,9 +119,14 @@ export default class LoginScreen extends Component<Props> {
                                 {this.state.errorConsole}
                             </Text>
                             <TextInput style={styles.textInputStyle} placeholder="نام کاربری"
+                                       autoCapitalize='none'
+                                       autoCorrect={false}
                                        onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
                             <View style={{height: 10}}/>
                             <TextInput style={styles.textInputStyle} placeholder="رمز عبور"
+                                       autoCapitalize='none'
+                                       autoCorrect={false}
+                                       secureTextEntry={true}
                                        onChangeText={(textInputPassword) => this.setState({textInputPassword})}/>
                             <View style={{height: 20}}/>
                             <View style={styles.containerRadioInput}>

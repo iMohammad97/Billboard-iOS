@@ -297,6 +297,33 @@ export default class HomeScreen extends React.Component {
     };
 
     signOutAsync = async () => {
+        fetch('http://127.0.0.1:5000/api/logout', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                // console.log('respoooonse', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                    if (responseJson.status === 'OK') {
+                        // console.log("respoooooonse", responseJson.history);
+                        this.logOut();
+                    } else {
+                        this.logOut();
+                    }
+                }
+            )
+            .catch((error) => {
+                // console.error(error);
+                this.logOut();
+            });
+    };
+    logOut = async () => {
         await AsyncStorage.clear();
         this.props.navigation.navigate('Auth');
     };

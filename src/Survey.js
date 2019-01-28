@@ -17,8 +17,6 @@ export default class Survey extends React.Component {
     constructor(props) {
         super(props);
         this.loadUser();
-        this.loadGiftHistory();
-        this.loadGiftShop();
     };
 
     state = {
@@ -331,6 +329,7 @@ export default class Survey extends React.Component {
         await AsyncStorage.setItem('status', this.state.status);
         await AsyncStorage.setItem('id', this.state.id);
     };
+
     setModalResultVisible = (visible, giftshop) => {
         this.setState({giftDescription: giftshop.description});
         this.setState({giftCost: giftshop.cost});
@@ -339,158 +338,6 @@ export default class Survey extends React.Component {
     };
     setModalResultFailVisible = (visible, giftshop) => {
         this.setState({giftCardFail: visible});
-    };
-    buyGift = async (giftshop) => {
-        // console.log('rgiiiiiiiiiiiid', giftshop.id)
-        fetch('http://127.0.0.1:5000/api/shoppingresult/' + giftshop.id, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                // console.log('response', response);
-                return response.json();
-            })
-            .then((responseJson) => {
-                // console.log('json', responseJson);
-                if (responseJson.status === 'OK') {
-                    this.setModalResultVisible(true, giftshop);
-                } else if (responseJson.status === 'not enough credit') {
-                    this.setModalResultFailVisible(true);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    };
-
-    loadGiftShop = async () => {
-        fetch('http://127.0.0.1:5000/api/giftshop', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                // console.log('respoooonse', response);
-                return response.json();
-            })
-            .then((responseJson) => {
-                    if (responseJson.status === 'OK') {
-
-                        console.log("respoooooonse", responseJson.history);
-                        const giftShopListArrr = responseJson.gifts.map(giftShopItem => (
-                            <View key={giftShopItem.id} style={styles.giftCardShop}>
-                                <View style={styles.giftCardShopContainer}>
-                                    <View style={styles.giftCardStyle}>
-                                        <View style={styles.giftCardContainer}>
-                                            <Image
-                                                style={styles.icGiftShop}
-                                                source={require('./images/icGift/icGift.png')}
-                                            />
-                                            <View style={styles.giftCardLabelCol}>
-                                                <Text style={styles.giftCardShopLabel}>
-                                                    گیفت کارت {giftShopItem.description} آیتونز
-                                                </Text>
-                                                <View style={styles.infoRow}>
-                                                    <Text style={styles.giftCardCode}>
-                                                        {giftShopItem.cost}
-                                                    </Text>
-                                                    <View style={styles.infoLabelShop}>
-                                                        <Image
-                                                            source={require('./images/icCreditWhite/icCreditWhite.png')}
-                                                            style={styles.infoIcon}
-                                                        />
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <View style={styles.giftCardBuyStyle}>
-                                        <View style={styles.giftCardBuyContainer}>
-                                            <TouchableOpacity style={styles.buyButton}
-                                                              onPress={() => this.buyGift(giftShopItem)}
-                                            >
-                                                <Text style={styles.buyButtonLabel}>
-                                                    خرید
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>
-                        ));
-                        this.setState({giftShopListArr: giftShopListArrr});
-                    }
-                    // this.setState({giftCode: responseJson["history"]["code"]});
-                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
-                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
-                    // this.setState({date: responseJson["history"]["date"]});
-                    // this.setState({description: responseJson["history"]["description"]});
-                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
-                    // this.setState({giftHistoryStatus: responseJson["status"]});
-                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
-                }
-            )
-            .catch((error) => {
-                // console.error(error);
-            });
-    };
-
-    loadGiftHistory = async () => {
-        fetch('http://127.0.0.1:5000/api/gifthistory', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                console.log('respoooonse', response);
-                return response.json();
-            })
-            .then((responseJson) => {
-                    if (responseJson.status === 'OK') {
-                        console.log("respoooooonse", responseJson.history);
-                        const historyListArrr = responseJson.history.map(historyItem => (
-                            <View key={historyItem.id} style={styles.giftCard}>
-                                <View style={styles.giftCardContainer}>
-                                    <Image
-                                        style={styles.icGift}
-                                        source={require('./images/icGift/icGift.png')}
-                                    />
-                                    <View style={styles.giftCardLabelCol}>
-                                        <Text style={styles.giftCardLabel}>
-                                            گیفت کارت {historyItem.description} آیتونز
-                                        </Text>
-                                        <Text style={styles.giftCardCode}>
-                                            {historyItem.code}
-                                        </Text>
-                                    </View>
-                                </View>
-                            </View>
-                        ));
-                        this.setState({historyListArr: historyListArrr});
-                    }
-                    // this.setState({giftCode: responseJson["history"]["code"]});
-                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
-                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
-                    // this.setState({date: responseJson["history"]["date"]});
-                    // this.setState({description: responseJson["history"]["description"]});
-                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
-                    // this.setState({giftHistoryStatus: responseJson["status"]});
-                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
-                }
-            )
-            .catch((error) => {
-                // console.error(error);
-            });
     };
 
     loadUser = async () => {
@@ -507,6 +354,33 @@ export default class Survey extends React.Component {
     };
 
     signOutAsync = async () => {
+        fetch('http://127.0.0.1:5000/api/logout', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                // console.log('respoooonse', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                    if (responseJson.status === 'OK') {
+                        // console.log("respoooooonse", responseJson.history);
+                        this.logOut();
+                    } else {
+                        this.logOut();
+                    }
+                }
+            )
+            .catch((error) => {
+                // console.error(error);
+                this.logOut();
+            });
+    };
+    logOut = async () => {
         await AsyncStorage.clear();
         this.props.navigation.navigate('Auth');
     };

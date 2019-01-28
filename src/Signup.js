@@ -38,7 +38,7 @@ export default class SignUpScreen extends Component<Props> {
                 this.setState({status: responseJson["status"]});
                 // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 if (this.state.status === "OK") {
-                    this.signUpAndSignInAsync()
+                    this.handleLogin()
                     // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 } else {
                     let err = this.state.status;
@@ -57,7 +57,7 @@ export default class SignUpScreen extends Component<Props> {
             .catch((error) => {
                 console.error(error);
             });
-    }
+    };
 
     state = {
         // Text inputs :
@@ -80,6 +80,50 @@ export default class SignUpScreen extends Component<Props> {
     static navigationOptions = {
         header: null,
     };
+    handleLogin = async () => {
+        fetch('http://127.0.0.1:5000/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({"email": this.state.textInputUsername, "password": this.state.textInputPassword})
+        })
+            .then((response) =>  {
+                // console.log('response', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                // console.log('json', responseJson);
+                this.setState({email: responseJson["user"]["email"]});
+                this.setState({name: responseJson["user"]["name"]});
+                this.setState({credit: String(responseJson["user"]["credit"])});
+                this.setState({role: responseJson["user"]["role"]});
+                this.setState({id: String(responseJson["user"]["id"])});
+                this.setState({status: responseJson["status"]});
+                // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                if (this.state.status === "OK") {
+                    this.signUpAndSignInAsync()
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                } else {
+                    let err = this.state.status;
+                    switch (err) {
+                        case "password incorrect":
+                            this.setState({errorConsole: "خطا:‌ رمز عبور اشتباه است"});
+                            break;
+                        case "user not found":
+                            this.setState({errorConsole: "خطا    : نام کاربری یافت نشد"});
+                            break;
+                        default:
+                            this.setState({errorConsole: "خطا: عدم ارتباط با سرور"});
+                    }
+                    ;
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 
     signUpAndSignInAsync = async () => {
         await AsyncStorage.setItem('credit', this.state.credit);
@@ -88,6 +132,7 @@ export default class SignUpScreen extends Component<Props> {
         await AsyncStorage.setItem('role', this.state.role);
         await AsyncStorage.setItem('status', this.state.status);
         await AsyncStorage.setItem('id', this.state.id);
+
         this.props.navigation.navigate('App');
     };
 
@@ -122,12 +167,19 @@ export default class SignUpScreen extends Component<Props> {
                                 {this.state.errorConsole}
                             </Text>
                             <TextInput style={styles.textInputStyle} placeholder="نام"
+                                       autoCapitalize='none'
+                                       autoCorrect={false}
                                        onChangeText={(textInputName) => this.setState({textInputName})}/>
                             <View style={{height: 10}}/>
                             <TextInput style={styles.textInputStyle} placeholder="ایمیل"
+                                       autoCapitalize='none'
+                                       autoCorrect={false}
                                        onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
                             <View style={{height: 10}}/>
                             <TextInput style={styles.textInputStyle} placeholder="رمز عبور"
+                                       autoCapitalize='none'
+                                       autoCorrect={false}
+                                       secureTextEntry={true}
                                        onChangeText={(textInputPassword) => this.setState({textInputPassword})}/>
                             <View style={{height: 20}}/>
                             <View style={styles.containerRadioInput}>
