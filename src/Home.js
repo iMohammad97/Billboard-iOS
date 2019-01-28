@@ -90,6 +90,14 @@ export default class HomeScreen extends React.Component {
                     <View style={styles.profileCard}>
                         <View style={styles.profileCardContainer}>
                             <View style={styles.imageRow}>
+                                <TouchableOpacity style={styles.refreshButton}
+                                                  onPress={() => this.infoUpdate()}
+                                >
+                                    <Image
+                                        source={require('./images/icRefresh/icRefresh.png')}
+                                        style={styles.refreshIcon}
+                                    />
+                                </TouchableOpacity>
                                 <Image
                                     source={require('./images/profile/profile.jpg')}
                                     style={styles.profilePicture}
@@ -350,9 +358,9 @@ const styles = StyleSheet.create({
         paddingRight: 10
     },
     profilePicture: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 80,
+        height: 80,
+        borderRadius: 40,
         borderColor: '#ea24a3',
         borderWidth: 3,
     },
@@ -408,7 +416,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
     },
     infoRow: {
         height: 30,
