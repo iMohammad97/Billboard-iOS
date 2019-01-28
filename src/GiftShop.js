@@ -130,19 +130,29 @@ export default class GiftSHop extends React.Component {
                     </View>
                     <ScrollView style={styles.mainContainerScrollView} showsVerticalScrollIndicator={false}>
                         <View style={styles.giftHistoryCard}>
-                            <View style={styles.giftHistoryCardContainer}>
-                                <Text style={styles.infoLabel}>
+                            <View style={styles.giftHistoryCardBarContainer}>
+                                <TouchableOpacity style={styles.refreshButton}
+                                                  onPress={() => this.loadGiftShop()}
+                                >
+                                    <Image
+                                        source={require('./images/icRefresh/icRefresh.png')}
+                                        style={styles.refreshIcon}
+                                    />
+                                </TouchableOpacity>
+                                <Text style={styles.infoLabel1}>
                                     گیفت شاپ
                                 </Text>
-                                    {this.state.giftShopListArr}
-                                    {/*<View style={styles.infoRow}>*/}
-                                    {/*<Text style={styles.infoData}>*/}
-                                    {/*{this.state.email}*/}
-                                    {/*</Text>*/}
-                                    {/*<Text style={styles.infoLabel}>*/}
-                                    {/*ایمیل:*/}
-                                    {/*</Text>*/}
-                                    {/*</View>*/}
+                            </View>
+                            <View style={styles.giftHistoryCardContainer}>
+                                {this.state.giftShopListArr}
+                                {/*<View style={styles.infoRow}>*/}
+                                {/*<Text style={styles.infoData}>*/}
+                                {/*{this.state.email}*/}
+                                {/*</Text>*/}
+                                {/*<Text style={styles.infoLabel}>*/}
+                                {/*ایمیل:*/}
+                                {/*</Text>*/}
+                                {/*</View>*/}
                             </View>
                         </View>
                         <View style={styles.giftHistory1Card}>
@@ -278,7 +288,7 @@ export default class GiftSHop extends React.Component {
             credentials: 'include',
             body: JSON.stringify({"user_id": await AsyncStorage.getItem('id')})
         })
-            .then((response) =>  {
+            .then((response) => {
                 // console.log('response', response);
                 return response.json();
             })
@@ -332,7 +342,7 @@ export default class GiftSHop extends React.Component {
     };
     buyGift = async (giftshop) => {
         // console.log('rgiiiiiiiiiiiid', giftshop.id)
-        fetch('http://127.0.0.1:5000/api/shoppingresult/'+giftshop.id, {
+        fetch('http://127.0.0.1:5000/api/shoppingresult/' + giftshop.id, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -340,7 +350,7 @@ export default class GiftSHop extends React.Component {
                 'Content-Type': 'application/json',
             },
         })
-            .then((response) =>  {
+            .then((response) => {
                 // console.log('response', response);
                 return response.json();
             })
