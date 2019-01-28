@@ -14,6 +14,7 @@ import LoginScreen from "./src/Login.js";
 import SignUpScreen from "./src/Signup.js";
 import HomeScreen from "./src/Home.js";
 import GiftShop from "./src/GiftShop.js";
+import Survey from "./src/Survey.js";
 import {createStackNavigator, createSwitchNavigator, createAppContainer, createDrawerNavigator, DrawerItems} from 'react-navigation';
 
 
@@ -67,12 +68,13 @@ const DrawerContent = (props) => (
         <DrawerItems {...props} />
     </View>
 );
-const AppStack = createStackNavigator({Home: HomeScreen, GiftShop: GiftShop});
+const AppStack = createStackNavigator({Home: HomeScreen, GiftShop: GiftShop, Survey: Survey});
 const AuthStack = createStackNavigator({LogIn: LoginScreen, SignUp: SignUpScreen});
 const drw = createDrawerNavigator(
     {
         Home: HomeScreen,
-        GiftShop: GiftShop
+        GiftShop: GiftShop,
+        Survey: Survey
     }, {
         drawerPosition: 'right',
         drawerBackgroundColor: '#fcc8f1',
