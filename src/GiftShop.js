@@ -25,6 +25,7 @@ export default class GiftSHop extends React.Component {
         loginView: false,
         signupView: true,
         giftCardCode: false,
+        giftCardFail: false,
         userInfo: '',
         // API fetched data states:
         credit: '',
@@ -233,6 +234,37 @@ export default class GiftSHop extends React.Component {
                         </View>
                     </View>
                 </Modal>
+                <Modal
+                    animationIn="zoomIn"
+                    animationOut="zoomOut"
+                    // animationInTiming={600}
+                    // animationOutTiming={600}
+                    hideModalContentWhileAnimating={true}
+                    onBackdropPress={() => this.setState({giftCardFail: false})}
+                    isVisible={this.state.giftCardFail}
+                    style={{margin: 0, marginTop: 40, height: 90, justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <View style={styles.giftCardFailModal}>
+                        <View style={styles.giftCardShopContainer}>
+                            <View style={styles.giftCardFailStyle}>
+                                <Text style={styles.giftCardShopLabel}>
+                                    موجودی حساب شما کافی نیست !
+                                </Text>
+                            </View>
+                            <View style={styles.giftCardBuyFailStyle}>
+                                <View style={styles.giftCardBuyContainer}>
+                                    <TouchableOpacity style={styles.buyButton}
+                                                      onPress={() => this.setState({giftCardFail: false})}
+                                    >
+                                        <Text style={styles.buyButtonLabel}>
+                                            باشه
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         );
     };
@@ -295,6 +327,9 @@ export default class GiftSHop extends React.Component {
         this.setState({giftCode: giftshop.code});
         this.setState({giftCardCode: visible});
     };
+    setModalResultFailVisible = (visible, giftshop) => {
+        this.setState({giftCardFail: visible});
+    };
     buyGift = async (giftshop) => {
         // console.log('rgiiiiiiiiiiiid', giftshop.id)
         fetch('http://127.0.0.1:5000/api/shoppingresult/'+giftshop.id, {
@@ -313,6 +348,8 @@ export default class GiftSHop extends React.Component {
                 // console.log('json', responseJson);
                 if (responseJson.status === 'OK') {
                     this.setModalResultVisible(true, giftshop);
+                } else if (responseJson.status === 'not enough credit') {
+                    this.setModalResultFailVisible(true);
                 }
             })
             .catch((error) => {
@@ -577,6 +614,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#fc44c5'
     },
+    giftCardFailModal: {
+        width: '90%',
+        height: 100,
+        marginTop: 10,
+        borderRadius: 5,
+        backgroundColor: '#fc44c5'
+    },
     giftCardContainer: {
         flex: 1,
         flexDirection: 'row',
@@ -589,6 +633,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '70%'
     },
+    giftCardFailStyle: {
+        width: '100%',
+        height: '50%'
+    },
     giftCardModalStyle: {
         width: '100%',
         height: '100%'
@@ -596,6 +644,10 @@ const styles = StyleSheet.create({
     giftCardBuyStyle: {
         width: '100%',
         height: '30%'
+    },
+    giftCardBuyFailStyle: {
+        width: '100%',
+        height: '50%'
     },
     giftCardBuyContainer: {
         flex: 1,
