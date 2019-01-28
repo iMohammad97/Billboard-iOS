@@ -12,6 +12,10 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import {DrawerActions} from "react-navigation";
+const color1 = '#203b61';
+const color2 = '#f3f4f7';
+const color3 = '#ffffff';
+const color4 = '#f97173';
 
 export default class Survey extends React.Component {
     constructor(props) {
@@ -188,67 +192,6 @@ export default class Survey extends React.Component {
                     // animationInTiming={600}
                     // animationOutTiming={600}
                     hideModalContentWhileAnimating={true}
-                    onBackdropPress={() => this.setState({giftCardCode: false})}
-                    isVisible={this.state.giftCardCode}
-                    style={{margin: 0, marginTop: 40, height: 90, justifyContent: 'center', alignItems: 'center'}}
-                >
-                    <View style={styles.giftCardShopModal}>
-                        <View style={styles.giftCardShopContainer}>
-                            <View style={styles.giftCardStyle}>
-                                <View style={styles.giftCardContainer}>
-                                    <Image
-                                        style={styles.icGiftShop}
-                                        source={require('./images/icGift/icGift.png')}
-                                    />
-                                    <View style={styles.giftCardLabelCol}>
-                                        <Text style={styles.giftCardShopLabel}>
-                                            گیفت کارت {this.state.giftDescription} آیتونز
-                                        </Text>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.giftCardCode}>
-                                                {this.state.giftCost}
-                                            </Text>
-                                            <View style={styles.infoLabelShop}>
-                                                <Image
-                                                    source={require('./images/icCreditWhite/icCreditWhite.png')}
-                                                    style={styles.infoIcon}
-                                                />
-                                            </View>
-                                        </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.giftCardCode}>
-                                                {this.state.giftCode}
-                                            </Text>
-                                            <View style={styles.infoLabelShop}>
-                                                <Image
-                                                    source={require('./images/icBarcode/icBarcode.png')}
-                                                    style={styles.infoIcon}
-                                                />
-                                            </View>
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={styles.giftCardBuyStyle}>
-                                <View style={styles.giftCardBuyContainer}>
-                                    <TouchableOpacity style={styles.buyButton}
-                                                      onPress={() => this.setState({giftCardCode: false})}
-                                    >
-                                        <Text style={styles.buyButtonLabel}>
-                                            باشه
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
-                <Modal
-                    animationIn="zoomIn"
-                    animationOut="zoomOut"
-                    // animationInTiming={600}
-                    // animationOutTiming={600}
-                    hideModalContentWhileAnimating={true}
                     onBackdropPress={() => this.setState({giftCardFail: false})}
                     isVisible={this.state.giftCardFail}
                     style={{margin: 0, marginTop: 40, height: 90, justifyContent: 'center', alignItems: 'center'}}
@@ -257,7 +200,7 @@ export default class Survey extends React.Component {
                         <View style={styles.giftCardShopContainer}>
                             <View style={styles.giftCardFailStyle}>
                                 <Text style={styles.giftCardShopLabel}>
-                                    موجودی حساب شما کافی نیست !
+                                    قبلا این نظر سنجی را پاسخ داده اید !
                                 </Text>
                             </View>
                             <View style={styles.giftCardBuyFailStyle}>
@@ -337,7 +280,7 @@ export default class Survey extends React.Component {
         this.setState({giftCode: giftshop.code});
         this.setState({giftCardCode: visible});
     };
-    setModalResultFailVisible = (visible, giftshop) => {
+    setModalResultFailVisible = (visible) => {
         this.setState({giftCardFail: visible});
     };
 
@@ -400,7 +343,7 @@ export default class Survey extends React.Component {
                                     <View style={styles.giftCardBuyStyle}>
                                         <View style={styles.giftCardBuyContainer}>
                                             <TouchableOpacity style={styles.buyButton}
-                                                              onPress={() => this.buyGift(surveyItem)}
+                                                              onPress={() => this.getSurveyPage(surveyItem)}
                                             >
                                                 <Text style={styles.buyButtonLabel}>
                                                     انتخاب
@@ -426,6 +369,45 @@ export default class Survey extends React.Component {
             .catch((error) => {
                 // console.error(error);
             });
+    };
+    getSurveyPage = async (surveyItem) => {
+        // console.log('rgiiiiiiiiiiiid', surveyItem.id)
+        fetch('http://127.0.0.1:5000/api/fillSurvey/' + surveyItem.id, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                // console.log('response', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                // console.log('json', responseJson);
+                if (responseJson.status === 'OK') {
+                    this.setState({srvyTitle: responseJson["survey"]["title"]});
+                    this.setState({srvyDescription: responseJson["survey"]["description"]});
+                    this.setState({srvyCredit: String(responseJson["survey"]["credit"])});
+                    this.setState({srvyExpDate: responseJson["survey"]["expiration_date"]});
+                    this.setState({srvyID: String(responseJson["survey"]["id"])});
+                    this.saveSurvey();
+                } else if (responseJson.status === 'user has already filled this survey') {
+                    this.setModalResultFailVisible(true);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+    saveSurvey = async () => {
+        await AsyncStorage.setItem('srvyTitle', this.state.srvyTitle);
+        await AsyncStorage.setItem('srvyDescription', this.state.srvyDescription);
+        await AsyncStorage.setItem('srvyCredit', this.state.srvyCredit);
+        await AsyncStorage.setItem('srvyExpDate', this.state.srvyExpDate);
+        await AsyncStorage.setItem('srvyID', this.state.srvyID);
+        this.props.navigation.navigate('SurveyFill');
     };
 
     loadUser = async () => {
@@ -506,14 +488,14 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'right',
-        color: '#ea24a3',
+        color: color1,
     },
     buyButtonLabel: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'center',
-        color: '#ea24a3',
+        color: color1,
     },
     refreshButton: {
         width: 25,
@@ -524,7 +506,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 5,
-        backgroundColor: '#fcc8f1',
+        backgroundColor: color2,
         justifyContent: 'center',
     },
     giftCardLabel: {
@@ -585,7 +567,7 @@ const styles = StyleSheet.create({
         height: 150,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#fc44c5'
+        backgroundColor: color1
     },
     giftCardShopModal: {
         width: '90%',
@@ -599,7 +581,7 @@ const styles = StyleSheet.create({
         height: 100,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#fc44c5'
+        backgroundColor: color1
     },
     giftCardContainer: {
         flex: 1,
@@ -673,7 +655,7 @@ const styles = StyleSheet.create({
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         textAlign: 'right',
         paddingRight: 5,
-        color: '#ea24a3',
+        color: color1,
     },
     infoLabel: {
         paddingBottom: 5,
@@ -776,12 +758,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         borderRadius: 5,
-        backgroundColor: '#fcc8f1'
+        backgroundColor: color2
     },
     giftHistoryCard: {
         width: '100%',
         borderRadius: 5,
-        backgroundColor: '#fcc8f1',
+        backgroundColor: color2,
         marginTop: 10,
         paddingTop: 0
     },
@@ -946,7 +928,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     navigationBar: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: 30,
     },
@@ -1001,7 +983,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     navigationBase: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: 50, //109
         shadowColor: "rgba(67, 82, 87, 0.4)",

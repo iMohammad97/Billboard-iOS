@@ -12,6 +12,10 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import {DrawerActions} from "react-navigation";
+const color1 = '#203b61';
+const color2 = '#f3f4f7';
+const color3 = '#ffffff';
+const color4 = '#f97173';
 
 export default class GiftSHop extends React.Component {
     constructor(props) {
@@ -235,7 +239,7 @@ export default class GiftSHop extends React.Component {
                                     <TouchableOpacity style={styles.buyButton}
                                                       onPress={() => this.setState({giftCardCode: false})}
                                     >
-                                        <Text style={styles.buyButtonLabel}>
+                                        <Text style={styles.buyButtonLabel1}>
                                             باشه
                                         </Text>
                                     </TouchableOpacity>
@@ -416,7 +420,7 @@ export default class GiftSHop extends React.Component {
                                             <TouchableOpacity style={styles.buyButton}
                                                               onPress={() => this.buyGift(giftShopItem)}
                                             >
-                                                <Text style={styles.buyButtonLabel}>
+                                                <Text style={styles.buyButtonLabel1}>
                                                     خرید
                                                 </Text>
                                             </TouchableOpacity>
@@ -571,14 +575,21 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'right',
-        color: '#ea24a3',
+        color: color1,
     },
     buyButtonLabel: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'center',
-        color: '#ea24a3',
+        color: color4,
+    },
+    buyButtonLabel1: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'center',
+        color: color1,
     },
     refreshButton: {
         width: 25,
@@ -589,7 +600,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 5,
-        backgroundColor: '#fcc8f1',
+        backgroundColor: color2,
         justifyContent: 'center',
     },
     giftCardLabel: {
@@ -635,28 +646,28 @@ const styles = StyleSheet.create({
         height: 70,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#fc44c5'
+        backgroundColor: color1
     },
     giftCardShop: {
         width: '100%',
         height: 150,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#fc44c5'
+        backgroundColor: color1
     },
     giftCardShopModal: {
         width: '90%',
         height: 180,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#fc44c5'
+        backgroundColor: color1
     },
     giftCardFailModal: {
         width: '90%',
         height: 100,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#fc44c5'
+        backgroundColor: color4
     },
     giftCardContainer: {
         flex: 1,
@@ -722,7 +733,7 @@ const styles = StyleSheet.create({
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         textAlign: 'right',
         paddingRight: 5,
-        color: '#ea24a3',
+        color: color1,
     },
     infoLabel: {
         paddingBottom: 5,
@@ -814,19 +825,19 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         borderRadius: 5,
-        backgroundColor: '#fcc8f1'
+        backgroundColor: color2
     },
     giftHistoryCard: {
         width: '100%',
         borderRadius: 5,
-        backgroundColor: '#fcc8f1',
+        backgroundColor: color2,
         marginTop: 10,
         paddingTop: 0
     },
     giftHistory1Card: {
         width: '100%',
         borderRadius: 5,
-        backgroundColor: '#fcc8f1',
+        backgroundColor: color2,
         marginTop: 10,
         paddingTop: 0,
         marginBottom: 30
@@ -984,7 +995,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     navigationBar: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: 30,
     },
@@ -1039,7 +1050,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     navigationBase: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: 50, //109
         shadowColor: "rgba(67, 82, 87, 0.4)",
