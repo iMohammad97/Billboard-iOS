@@ -173,52 +173,6 @@ export default class HomeScreen extends React.Component {
         );
     };
 
-    infoUpdate = async () => {
-        fetch('http://127.0.0.1:5000/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({"email": this.state.textInputUsername, "password": this.state.textInputPassword})
-        })
-            .then((response) =>  {
-                // console.log('response', response);
-                return response.json();
-            })
-            .then((responseJson) => {
-                // console.log('json', responseJson);
-                this.setState({email: responseJson["user"]["email"]});
-                this.setState({name: responseJson["user"]["name"]});
-                this.setState({credit: String(responseJson["user"]["credit"])});
-                this.setState({role: responseJson["user"]["role"]});
-                this.setState({id: String(responseJson["user"]["id"])});
-                this.setState({status: responseJson["status"]});
-                // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
-                if (this.state.status === "OK") {
-                    this.signInAsync()
-                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
-                } else {
-                    let err = this.state.status;
-                    switch (err) {
-                        case "password incorrect":
-                            this.setState({errorConsole: "خطا:‌ رمز عبور اشتباه است"});
-                            break;
-                        case "user not found":
-                            this.setState({errorConsole: "خطا: نام کاربری یافت نشد"});
-                            break;
-                        default:
-                            this.setState({errorConsole: "خطا: عدم ارتباط با سرور"});
-                    }
-                    ;
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-
-
     loadGiftHistory = async () => {
         fetch('http://127.0.0.1:5000/api/gifthistory', {
             method: 'GET',
@@ -269,7 +223,58 @@ export default class HomeScreen extends React.Component {
                 // console.error(error);
             });
     };
-
+    infoUpdate = async () => {
+        fetch('http://127.0.0.1:5000/api/getUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({"user_id": await AsyncStorage.getItem('id')})
+        })
+            .then((response) =>  {
+                // console.log('response', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                // console.log('json', responseJson);
+                this.setState({email: responseJson["user"]["email"]});
+                this.setState({name: responseJson["user"]["name"]});
+                this.setState({credit: String(responseJson["user"]["credit"])});
+                this.setState({role: responseJson["user"]["role"]});
+                this.setState({id: String(responseJson["user"]["id"])});
+                this.setState({status: responseJson["status"]});
+                // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                if (this.state.status === "OK") {
+                    this.signInAsyncUpdate()
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                } else {
+                    let err = this.state.status;
+                    switch (err) {
+                        case "password incorrect":
+                            this.setState({errorConsole: "خطا:‌ رمز عبور اشتباه است"});
+                            break;
+                        case "user not found":
+                            this.setState({errorConsole: "خطا: نام کاربری یافت نشد"});
+                            break;
+                        default:
+                            this.setState({errorConsole: "خطا: عدم ارتباط با سرور"});
+                    }
+                    ;
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+    signInAsyncUpdate = async () => {
+        await AsyncStorage.setItem('credit', this.state.credit);
+        await AsyncStorage.setItem('email', this.state.email);
+        await AsyncStorage.setItem('name', this.state.name);
+        await AsyncStorage.setItem('role', this.state.role);
+        await AsyncStorage.setItem('status', this.state.status);
+        await AsyncStorage.setItem('id', this.state.id);
+    };
     loadUser = async () => {
         try {
             this.setState({credit: await AsyncStorage.getItem('credit')});

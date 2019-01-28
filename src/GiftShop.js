@@ -24,6 +24,7 @@ export default class GiftSHop extends React.Component {
     state = {
         loginView: false,
         signupView: true,
+        giftCardCode: false,
         userInfo: '',
         // API fetched data states:
         credit: '',
@@ -85,7 +86,15 @@ export default class GiftSHop extends React.Component {
                     <View style={styles.profileCard}>
                         <View style={styles.profileCardContainer}>
                             <View style={styles.infoColumn}>
-                                <View style={styles.infoRow}>
+                                <TouchableOpacity style={styles.refreshButton}
+                                                  onPress={() => this.infoUpdate()}
+                                >
+                                    <Image
+                                        source={require('./images/icRefresh/icRefresh.png')}
+                                        style={styles.refreshIcon}
+                                    />
+                                </TouchableOpacity>
+                                <View style={styles.infoRowGiftShopBar}>
                                     <Text style={styles.infoData}>
                                         {this.state.name}
                                     </Text>
@@ -96,18 +105,7 @@ export default class GiftSHop extends React.Component {
                                         />
                                     </View>
                                 </View>
-                                <View style={styles.infoRow}>
-                                    <Text style={styles.infoData}>
-                                        {this.state.role}
-                                    </Text>
-                                    <View style={styles.infoLabel}>
-                                        <Image
-                                            source={require('./images/icRole/icRole.png')}
-                                            style={styles.infoIcon}
-                                        />
-                                    </View>
-                                </View>
-                                <View style={styles.infoRow}>
+                                <View style={styles.infoRowGiftShopBar}>
                                     <Text style={styles.infoData}>
                                         {this.state.credit}
                                     </Text>
@@ -174,10 +172,129 @@ export default class GiftSHop extends React.Component {
                         </View>
                     </ScrollView>
                 </View>
+                <Modal
+                    animationIn="zoomIn"
+                    animationOut="zoomOut"
+                    // animationInTiming={600}
+                    // animationOutTiming={600}
+                    hideModalContentWhileAnimating={true}
+                    onBackdropPress={() => this.setState({giftCardCode: false})}
+                    isVisible={this.state.giftCardCode}
+                    style={{margin: 0, marginTop: 40, height: 90, justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <View style={styles.giftCardShopModal}>
+                        <View style={styles.giftCardShopContainer}>
+                            <View style={styles.giftCardStyle}>
+                                <View style={styles.giftCardContainer}>
+                                    <Image
+                                        style={styles.icGiftShop}
+                                        source={require('./images/icGift/icGift.png')}
+                                    />
+                                    <View style={styles.giftCardLabelCol}>
+                                        <Text style={styles.giftCardShopLabel}>
+                                            گیفت کارت {this.state.giftDescription} آیتونز
+                                        </Text>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.giftCardCode}>
+                                                {this.state.giftCost}
+                                            </Text>
+                                            <View style={styles.infoLabelShop}>
+                                                <Image
+                                                    source={require('./images/icCreditWhite/icCreditWhite.png')}
+                                                    style={styles.infoIcon}
+                                                />
+                                            </View>
+                                        </View>
+                                        <View style={styles.infoRow}>
+                                            <Text style={styles.giftCardCode}>
+                                                {this.state.giftCode}
+                                            </Text>
+                                            <View style={styles.infoLabelShop}>
+                                                <Image
+                                                    source={require('./images/icBarcode/icBarcode.png')}
+                                                    style={styles.infoIcon}
+                                                />
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={styles.giftCardBuyStyle}>
+                                <View style={styles.giftCardBuyContainer}>
+                                    <TouchableOpacity style={styles.buyButton}
+                                                      onPress={() => this.setState({giftCardCode: false})}
+                                    >
+                                        <Text style={styles.buyButtonLabel}>
+                                            باشه
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         );
     };
 
+    infoUpdate = async () => {
+        fetch('http://127.0.0.1:5000/api/getUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({"user_id": await AsyncStorage.getItem('id')})
+        })
+            .then((response) =>  {
+                // console.log('response', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                // console.log('json', responseJson);
+                this.setState({email: responseJson["user"]["email"]});
+                this.setState({name: responseJson["user"]["name"]});
+                this.setState({credit: String(responseJson["user"]["credit"])});
+                this.setState({role: responseJson["user"]["role"]});
+                this.setState({id: String(responseJson["user"]["id"])});
+                this.setState({status: responseJson["status"]});
+                // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                if (this.state.status === "OK") {
+                    this.signInAsyncUpdate()
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                } else {
+                    let err = this.state.status;
+                    switch (err) {
+                        case "password incorrect":
+                            this.setState({errorConsole: "خطا:‌ رمز عبور اشتباه است"});
+                            break;
+                        case "user not found":
+                            this.setState({errorConsole: "خطا: نام کاربری یافت نشد"});
+                            break;
+                        default:
+                            this.setState({errorConsole: "خطا: عدم ارتباط با سرور"});
+                    }
+                    ;
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+    signInAsyncUpdate = async () => {
+        await AsyncStorage.setItem('credit', this.state.credit);
+        await AsyncStorage.setItem('email', this.state.email);
+        await AsyncStorage.setItem('name', this.state.name);
+        await AsyncStorage.setItem('role', this.state.role);
+        await AsyncStorage.setItem('status', this.state.status);
+        await AsyncStorage.setItem('id', this.state.id);
+    };
+    setModalResultVisible = (visible, giftshop) => {
+        this.setState({giftDescription: giftshop.description});
+        this.setState({giftCost: giftshop.cost});
+        this.setState({giftCode: giftshop.code});
+        this.setState({giftCardCode: visible});
+    };
     buyGift = async (giftshop) => {
         // console.log('rgiiiiiiiiiiiid', giftshop.id)
         fetch('http://127.0.0.1:5000/api/shoppingresult/'+giftshop.id, {
@@ -195,6 +312,7 @@ export default class GiftSHop extends React.Component {
             .then((responseJson) => {
                 // console.log('json', responseJson);
                 if (responseJson.status === 'OK') {
+                    this.setModalResultVisible(true, giftshop);
                 }
             })
             .catch((error) => {
@@ -348,6 +466,18 @@ export default class GiftSHop extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    giftCardCodeModalStyle: {
+        height: 250,
+        width: '90%',
+        backgroundColor: '#fff',
+        borderRadius: 4,
+    },
+    giftCardCodeModalContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
     refreshIcon: {
         width: 25,
         height: 25
@@ -440,6 +570,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#fc44c5'
     },
+    giftCardShopModal: {
+        width: '90%',
+        height: 180,
+        marginTop: 10,
+        borderRadius: 5,
+        backgroundColor: '#fc44c5'
+    },
     giftCardContainer: {
         flex: 1,
         flexDirection: 'row',
@@ -451,6 +588,10 @@ const styles = StyleSheet.create({
     giftCardStyle: {
         width: '100%',
         height: '70%'
+    },
+    giftCardModalStyle: {
+        width: '100%',
+        height: '100%'
     },
     giftCardBuyStyle: {
         width: '100%',
@@ -529,6 +670,15 @@ const styles = StyleSheet.create({
     },
     infoRow: {
         height: 50,
+        // borderWidth: 5,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    infoRowGiftShopBar: {
+        height: 50,
+        width: '40%',
         // borderWidth: 5,
         flex: 1,
         flexDirection: 'row',
