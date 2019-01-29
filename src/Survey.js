@@ -134,14 +134,7 @@ export default class Survey extends React.Component {
                     <ScrollView style={styles.mainContainerScrollView} showsVerticalScrollIndicator={false}>
                         <View style={styles.giftHistoryCard}>
                             <View style={styles.giftHistoryCardBarContainer}>
-                                <TouchableOpacity style={styles.refreshButton}
-                                                  onPress={() => this.loadGiftShop()}
-                                >
-                                    <Image
-                                        source={require('./images/icRefresh/icRefresh.png')}
-                                        style={styles.refreshIcon}
-                                    />
-                                </TouchableOpacity>
+
                                 <Text style={styles.infoLabel1}>
                                     نظر سنجی های موجود
                                 </Text>
@@ -476,7 +469,7 @@ const styles = StyleSheet.create({
     giftHistoryCardBarContainer: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         paddingLeft: 10
     },
