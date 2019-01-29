@@ -12,6 +12,7 @@
     "react-native-gesture-handler": "^1.0.12",
     "react-native-modal": "^7.0.2",
     "react-native-radio-button": "^2.0.1",
+    "react-native-simple-radio-button": "^2.7.3",
     "react-navigation": "^3.0.9"
   },
   "devDependencies": {

@@ -1,17 +1,23 @@
 import React from 'react';
 import {
-    ActivityIndicator,
     AsyncStorage,
-    Button, Image,
-    StatusBar,
-    StyleSheet, Text, TouchableOpacity,
-    View,
+    Image,
     Platform,
-    Alert,
     ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import Modal from "react-native-modal";
-import {DrawerActions} from "react-navigation";
+// import RadioButton from 'react-native-radio-button';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+
+var radio_props = [
+    {label: 'param1', value: 0},
+    {label: 'param2', value: 1}
+];
+
 const color1 = '#203b61';
 const color2 = '#f3f4f7';
 const color3 = '#ffffff';
@@ -46,8 +52,16 @@ export default class SurveyFill extends React.Component {
         description: '',
         giftDBId: '',
         giftHistoryStatus: '',
-        //api url
+        //answers state
+
     };
+
+    var
+    radio_props = [
+        {label: 'param1', value: 0},
+        {label: 'param2', value: 1}
+    ];
+
 
     static navigationOptions = {
         header: null,
@@ -80,7 +94,7 @@ export default class SurveyFill extends React.Component {
                             Billboard
                         </Text>
                         <TouchableOpacity
-                                          style={styles.TouchableOpacityboundLeft1}>
+                            style={styles.TouchableOpacityboundLeft1}>
                             <View style={styles.TouchableOpacityboundFlexLeft}>
 
                             </View>
@@ -135,14 +149,14 @@ export default class SurveyFill extends React.Component {
                     <ScrollView style={styles.mainContainerScrollView} showsVerticalScrollIndicator={false}>
                         <View style={styles.giftHistoryCard}>
                             <View style={styles.giftHistoryCardBarContainer}>
-                                <TouchableOpacity style={styles.refreshButton}
-                                                  onPress={() => this.loadGiftShop()}
-                                >
-                                    <Image
-                                        source={require('./images/icRefresh/icRefresh.png')}
-                                        style={styles.refreshIcon}
-                                    />
-                                </TouchableOpacity>
+                                {/*<TouchableOpacity style={styles.refreshButton}*/}
+                                                  {/*onPress={() => this.loadGiftShop()}*/}
+                                {/*>*/}
+                                    {/*<Image*/}
+                                        {/*source={require('./images/icRefresh/icRefresh.png')}*/}
+                                        {/*style={styles.refreshIcon}*/}
+                                    {/*/>*/}
+                                {/*</TouchableOpacity>*/}
                                 <Text style={styles.infoLabel1}>
                                     {this.state.srvyDescription}
                                 </Text>
@@ -252,34 +266,79 @@ export default class SurveyFill extends React.Component {
                 if (responseJson.status === 'OK') {
                     // console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', this.state.srvyAPI);
                     // console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', responseJson.survey.questions);
+                    let radio_props = [[],[],[],[]];
+                    const surveyItemListArrr = responseJson.survey.questions.map((surveyItem, Oindex) => (
 
-                    const surveyItemListArrr = responseJson.survey.questions.map(surveyItem => (
                         <View key={surveyItem.id} style={styles.giftCardShop}>
                             <View style={styles.giftCardShopContainer}>
                                 <Text style={styles.giftCardShopLabel}>
                                     {surveyItem.context}
                                 </Text>
-                                { surveyItem.items.map(item => {
-                                    return (
-                                        <View key={item.id} style={styles.infoRow}>
+                                {surveyItem.items.map((item, index) => {
+                                    // this.setState({
+                                    //     questItem: [...this.state.questItem, {q: Oindex+1, i: index+1, val: true}]
+                                    // });
+                                    // this.state.questItem.forEach(function (v) {
+                                    //     if (v.q === surveyItem.id) {
+                                    //         if (v.i === item.id) {
+                                    //             console.log(v.q)
+                                    //         }
+                                    //     }
+                                    // });
+                                    // console.log('heeeeee',this.state.questItem[Oindex].options[index].val);
+                                    // this.state.questItem.map(value => value.q);
 
-                                            <Text style={styles.giftCardCode}>
-                                                {item.context}
-                                            </Text>
-                                            <View style={styles.infoLabelShop}>
-                                                <Image
-                                                    source={require('./images/icCreditWhite/icCreditWhite.png')}
-                                                    style={styles.infoIcon}
-                                                />
-                                            </View>
-                                        </View>
-                                    );
+                                    var c = item.context;
+                                    radio_props[Oindex].push({label: c, value: 1});
+
+                                    // return (
+                                    //     <View key={item.id} style={styles.infoRow}>
+                                    //
+                                    //         <Text style={styles.giftCardCode}>
+                                    //             {item.context} //
+                                    //             {index} //
+                                    //             {Oindex} //
+                                    //             {parseInt(item.id)} //
+                                    //             {parseInt(surveyItem.id)}
+                                    //         </Text>
+                                    //         <View style={styles.infoLabelShop}>
+                                    //             <RadioForm
+                                    //                 radio_props={radio_props}
+                                    //                 initial={0}
+                                    //                 onPress={(value) => {
+                                    //                     this.setState({value: value})
+                                    //                 }}
+                                    //             />
+                                    //             {/*<RadioButton*/}
+                                    //             {/*animation={'bounceIn'}*/}
+                                    //             {/*isSelected={ this.state.questItem[Oindex].options[index].val }*/}
+                                    //             {/*size={13}*/}
+                                    //             {/*innerColor={color2}*/}
+                                    //             {/*outerColor={color2}*/}
+                                    //             {/*onPress={() => (this.answerItem(Oindex, index))}*/}
+                                    //             {/*/>*/}
+                                    //         </View>
+                                    //     </View>
+                                    // );
+
                                 })
                                 }
+                                <RadioForm
+                                    radio_props={radio_props[Oindex]}
+                                    initial={0}
+                                    selectedButtonColor={color2}
+                                    buttonColor={color2}
+                                    labelStyle={styles.giftCardCode}
+                                    wrapStyle={styles.radio}
+                                    onPress={(value) => {
+                                        this.setState({value: value})
+                                    }}
+                                />
                             </View>
                         </View>
                     ));
                     this.setState({surveyItemListArr: surveyItemListArrr});
+                    this.setState({questionsItems: radio_props});
                 } else if (responseJson.status === 'user has already filled this survey') {
                     this.setModalResultFailVisible(true);
                 }
@@ -295,11 +354,10 @@ export default class SurveyFill extends React.Component {
             this.setState({srvyCredit: await AsyncStorage.getItem('srvyCredit')});
             this.setState({srvyExpDate: await AsyncStorage.getItem('srvyExpDate')});
             this.setState({srvyID: await AsyncStorage.getItem('srvyID')});
-            this.setState({srvyAPI: 'http://127.0.0.1:5000/api/fillSurvey/'+this.state.srvyID});
+            this.setState({srvyAPI: 'http://127.0.0.1:5000/api/fillSurvey/' + this.state.srvyID});
             // console.log('hiiiiinkxenxekxnii',this.state.srvyAPI);
 
             this.getSurveyItems();
-
 
 
         } catch (error) {
@@ -313,6 +371,9 @@ export default class SurveyFill extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    radio: {
+        flexDirection: 'row-reverse',
+    },
     giftCardCodeModalStyle: {
         height: 250,
         width: '90%',
@@ -332,7 +393,7 @@ const styles = StyleSheet.create({
     giftHistoryCardBarContainer: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         paddingLeft: 10
     },
@@ -383,7 +444,7 @@ const styles = StyleSheet.create({
     },
     giftCardCode: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanRegular(FaNum)",
-        fontSize: 17,
+        fontSize: 15,
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         textAlign: 'right',
         paddingRight: 0,
