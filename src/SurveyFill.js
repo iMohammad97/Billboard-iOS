@@ -21,6 +21,8 @@ export default class SurveyFill extends React.Component {
     constructor(props) {
         super(props);
         this.loadUser();
+        this.loadSurvey();
+        // this.getSurveyItems();
     };
 
     state = {
@@ -44,6 +46,7 @@ export default class SurveyFill extends React.Component {
         description: '',
         giftDBId: '',
         giftHistoryStatus: '',
+        //api url
     };
 
     static navigationOptions = {
@@ -142,47 +145,13 @@ export default class SurveyFill extends React.Component {
                                     />
                                 </TouchableOpacity>
                                 <Text style={styles.infoLabel1}>
-                                    نظر سنجی های موجود
+                                    {this.state.srvyDescription}
                                 </Text>
                             </View>
-                            <View style={styles.giftHistoryCardContainer1}>
-                                {this.state.surveysListArr}
-                                {/*<View style={styles.infoRow}>*/}
-                                {/*<Text style={styles.infoData}>*/}
-                                {/*{this.state.email}*/}
-                                {/*</Text>*/}
-                                {/*<Text style={styles.infoLabel}>*/}
-                                {/*ایمیل:*/}
-                                {/*</Text>*/}
-                                {/*</View>*/}
+                            <View style={styles.giftHistoryCardContainer2}>
+                                {this.state.surveyItemListArr}
                             </View>
                         </View>
-                        {/*<View style={styles.giftHistory1Card}>*/}
-                        {/*<View style={styles.giftHistoryCardBarContainer}>*/}
-                        {/*<TouchableOpacity style={styles.refreshButton}*/}
-                        {/*onPress={() => this.loadGiftHistory()}*/}
-                        {/*>*/}
-                        {/*<Image*/}
-                        {/*source={require('./images/icRefresh/icRefresh.png')}*/}
-                        {/*style={styles.refreshIcon}*/}
-                        {/*/>*/}
-                        {/*</TouchableOpacity>*/}
-                        {/*<Text style={styles.infoLabel1}>*/}
-                        {/*تاریخچه گیفت های دریافتی*/}
-                        {/*</Text>*/}
-                        {/*</View>*/}
-                        {/*<View style={styles.giftHistoryCardContainer1}>*/}
-                        {/*{this.state.historyListArr}*/}
-                        {/*/!*<View style={styles.infoRow}>*!/*/}
-                        {/*/!*<Text style={styles.infoData}>*!/*/}
-                        {/*/!*{this.state.email}*!/*/}
-                        {/*/!*</Text>*!/*/}
-                        {/*/!*<Text style={styles.infoLabel}>*!/*/}
-                        {/*/!*ایمیل:*!/*/}
-                        {/*/!*</Text>*!/*/}
-                        {/*/!*</View>*!/*/}
-                        {/*</View>*/}
-                        {/*</View>*/}
                     </ScrollView>
                 </View>
             </View>
@@ -252,18 +221,6 @@ export default class SurveyFill extends React.Component {
         this.setState({giftCardFail: visible});
     };
 
-    loadSurveyData = async () => {
-        try {
-            this.setState({credit: await AsyncStorage.getItem('credit')});
-            this.setState({email: await AsyncStorage.getItem('email')});
-            this.setState({name: await AsyncStorage.getItem('name')});
-            this.setState({role: await AsyncStorage.getItem('role')});
-            this.setState({status: await AsyncStorage.getItem('status')});
-            this.setState({userId: await AsyncStorage.getItem('id')});
-        } catch (error) {
-            // Error retrieving data
-        }
-    };
 
     loadUser = async () => {
         try {
@@ -277,9 +234,9 @@ export default class SurveyFill extends React.Component {
             // Error retrieving data
         }
     };
+    getSurveyItems = async () => {
 
-    signOutAsync = async () => {
-        fetch('http://127.0.0.1:5000/api/logout', {
+        fetch(this.state.srvyAPI, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -288,22 +245,82 @@ export default class SurveyFill extends React.Component {
             },
         })
             .then((response) => {
-                // console.log('respoooonse', response);
+                // console.log('response', response);
                 return response.json();
             })
             .then((responseJson) => {
-                    if (responseJson.status === 'OK') {
-                        // console.log("respoooooonse", responseJson.history);
-                        this.logOut();
-                    } else {
-                        this.logOut();
-                    }
+                // console.log('json', responseJson);
+                if (responseJson.status === 'OK') {
+                    console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', this.state.srvyAPI);
+                    console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', responseJson.survey.questions);
+
+                    const surveyItemListArrr = responseJson.survey.questions.map(surveyItem => (
+                        <View key={surveyItem.id} style={styles.giftCardShop}>
+                            <View style={styles.giftCardShopContainer}>
+                                <View style={styles.giftCardStyle}>
+                                    <View style={styles.giftCardContainer}>
+                                        <Image
+                                            style={styles.icGiftShop}
+                                            source={require('./images/icGift/icGift.png')}
+                                        />
+                                        <View style={styles.giftCardLabelCol}>
+                                            <Text style={styles.giftCardShopLabel}>
+                                                گیفت کارت {surveyItem.context} آیتونز
+                                            </Text>
+                                            <View style={styles.infoRow}>
+                                                <Text style={styles.giftCardCode}>
+                                                    {surveyItem.context}
+                                                </Text>
+                                                <View style={styles.infoLabelShop}>
+                                                    <Image
+                                                        source={require('./images/icCreditWhite/icCreditWhite.png')}
+                                                        style={styles.infoIcon}
+                                                    />
+                                                </View>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={styles.giftCardBuyStyle}>
+                                    <View style={styles.giftCardBuyContainer}>
+                                        <TouchableOpacity style={styles.buyButton}
+                                                          onPress={() => this.buyGift(surveyItem)}
+                                        >
+                                            <Text style={styles.buyButtonLabel1}>
+                                                خرید
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    ));
+                    this.setState({surveyItemListArr: surveyItemListArrr});
+                } else if (responseJson.status === 'user has already filled this survey') {
+                    this.setModalResultFailVisible(true);
                 }
-            )
+            })
             .catch((error) => {
-                // console.error(error);
-                this.logOut();
+                console.error(error);
             });
+    };
+    loadSurvey = async () => {
+        try {
+            this.setState({srvyTitle: await AsyncStorage.getItem('srvyTitle')});
+            this.setState({srvyDescription: await AsyncStorage.getItem('srvyDescription')});
+            this.setState({srvyCredit: await AsyncStorage.getItem('srvyCredit')});
+            this.setState({srvyExpDate: await AsyncStorage.getItem('srvyExpDate')});
+            this.setState({srvyID: await AsyncStorage.getItem('srvyID')});
+            this.setState({srvyAPI: 'http://127.0.0.1:5000/api/fillSurvey/'+this.state.srvyID});
+            // console.log('hiiiiinkxenxekxnii',this.state.srvyAPI);
+
+            this.getSurveyItems();
+
+
+
+        } catch (error) {
+            // Error retrieving data
+        }
     };
     logOut = async () => {
         await AsyncStorage.clear();
@@ -422,7 +439,7 @@ const styles = StyleSheet.create({
         height: 150,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#fc44c5'
+        backgroundColor: color1
     },
     giftCardShopModal: {
         width: '90%',
@@ -593,18 +610,18 @@ const styles = StyleSheet.create({
         maxHeight: '100%',
         // paddingTop: 0,
         flex: 1,
-        flexDirection: 'column',
+        flexDirection: 'column-reverse',
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
         backgroundColor: 'transparent',
     },
-    giftHistoryCardContainer1: {
+    giftHistoryCardContainer2: {
         margin: 10,
         marginTop: 0,
         maxHeight: '100%',
         // paddingTop: 0,
         flex: 1,
-        flexDirection: 'column-reverse',
+        flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
         backgroundColor: 'transparent',

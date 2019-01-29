@@ -387,7 +387,7 @@ export default class GiftSHop extends React.Component {
             .then((responseJson) => {
                     if (responseJson.status === 'OK') {
 
-                        console.log("respoooooonse", responseJson.history);
+                        // console.log("respoooooonse", responseJson.history);
                         const giftShopListArrr = responseJson.gifts.map(giftShopItem => (
                             <View key={giftShopItem.id} style={styles.giftCardShop}>
                                 <View style={styles.giftCardShopContainer}>
@@ -456,12 +456,12 @@ export default class GiftSHop extends React.Component {
             },
         })
             .then((response) => {
-                console.log('respoooonse', response);
+                // console.log('respoooonse', response);
                 return response.json();
             })
             .then((responseJson) => {
                     if (responseJson.status === 'OK') {
-                        console.log("respoooooonse", responseJson.history);
+                        // console.log("respoooooonse", responseJson.history);
                         const historyListArrr = responseJson.history.map(historyItem => (
                             <View key={historyItem.id} style={styles.giftCard}>
                                 <View style={styles.giftCardContainer}>

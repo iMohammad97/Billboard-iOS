@@ -146,7 +146,7 @@ export default class Survey extends React.Component {
                                     نظر سنجی های موجود
                                 </Text>
                             </View>
-                            <View style={styles.giftHistoryCardContainer1}>
+                            <View style={styles.giftHistoryCardContainer2}>
                                 {this.state.surveysListArr}
                                 {/*<View style={styles.infoRow}>*/}
                                 {/*<Text style={styles.infoData}>*/}
@@ -743,13 +743,13 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         backgroundColor: 'transparent',
     },
-    giftHistoryCardContainer1: {
+    giftHistoryCardContainer2: {
         margin: 10,
         marginTop: 0,
         maxHeight: '100%',
         // paddingTop: 0,
         flex: 1,
-        flexDirection: 'column-reverse',
+        flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
         backgroundColor: 'transparent',
