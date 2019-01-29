@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 // import RadioButton from 'react-native-radio-button';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+import Modal from "react-native-modal";
+
 
 var radio_props = [
     {label: 'param1', value: 0},
@@ -36,6 +38,7 @@ export default class SurveyFill extends React.Component {
         signupView: true,
         giftCardCode: false,
         giftCardFail: false,
+        userAFK: false,
         userInfo: '',
         // API fetched data states:
         credit: '',
@@ -56,11 +59,6 @@ export default class SurveyFill extends React.Component {
 
     };
 
-    var
-    radio_props = [
-        {label: 'param1', value: 0},
-        {label: 'param2', value: 1}
-    ];
 
 
     static navigationOptions = {
@@ -166,7 +164,81 @@ export default class SurveyFill extends React.Component {
                             </View>
                         </View>
                     </ScrollView>
+                    <View style={styles.profileCard1}>
+                        <View style={styles.profileCardContainer2}>
+                            <TouchableOpacity onPress={() => this.submitSurvey()}
+                                              style={styles.buyButton}>
+                                <View style={styles.TouchableOpacityboundFlexLeft}>
+                                    <Text style={styles.buyButtonLabel}>
+                                        ثبت نظر سنجی
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
+                <Modal
+                    animationIn="zoomIn"
+                    animationOut="zoomOut"
+                    // animationInTiming={600}
+                    // animationOutTiming={600}
+                    hideModalContentWhileAnimating={true}
+                    onBackdropPress={() => this.setState({giftCardFail: false})}
+                    isVisible={this.state.giftCardFail}
+                    style={{margin: 0, marginTop: 40, height: 90, justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <View style={styles.giftCardFailModal}>
+                        <View style={styles.giftCardShopContainer}>
+                            <View style={styles.giftCardFailStyle}>
+                                <Text style={styles.giftCardShopLabel}>
+                                    قبلا در این نظر سنجی شرکت کردید !
+                                </Text>
+                            </View>
+                            <View style={styles.giftCardBuyFailStyle}>
+                                <View style={styles.giftCardBuyContainer}>
+                                    <TouchableOpacity style={styles.buyButton1}
+                                                      onPress={() => this.setState({giftCardFail: false})}
+                                    >
+                                        <Text style={styles.buyButtonLabel1}>
+                                            باشه
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                <Modal
+                    animationIn="zoomIn"
+                    animationOut="zoomOut"
+                    // animationInTiming={600}
+                    // animationOutTiming={600}
+                    hideModalContentWhileAnimating={true}
+                    onBackdropPress={() => this.setState({userAFK: false})}
+                    isVisible={this.state.userAFK}
+                    style={{margin: 0, marginTop: 40, height: 90, justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <View style={styles.giftCardFailModal}>
+                        <View style={styles.giftCardShopContainer}>
+                            <View style={styles.giftCardFailStyle}>
+                                <Text style={styles.giftCardShopLabel}>
+                                    لطفا به سوالات پاسخ دهید !
+                                </Text>
+                            </View>
+                            <View style={styles.giftCardBuyFailStyle}>
+                                <View style={styles.giftCardBuyContainer}>
+                                    <TouchableOpacity style={styles.buyButton1}
+                                                      onPress={() => this.setState({userAFK: false})}
+                                    >
+                                        <Text style={styles.buyButtonLabel1}>
+                                            باشه
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         );
     };
@@ -224,11 +296,8 @@ export default class SurveyFill extends React.Component {
         await AsyncStorage.setItem('id', this.state.id);
     };
 
-    setModalResultVisible = (visible, giftshop) => {
-        this.setState({giftDescription: giftshop.description});
-        this.setState({giftCost: giftshop.cost});
-        this.setState({giftCode: giftshop.code});
-        this.setState({giftCardCode: visible});
+    setModalAFKVisible = (visible) => {
+        this.setState({userAFK: visible});
     };
     setModalResultFailVisible = (visible) => {
         this.setState({giftCardFail: visible});
@@ -289,7 +358,7 @@ export default class SurveyFill extends React.Component {
                                     // this.state.questItem.map(value => value.q);
 
                                     var c = item.context;
-                                    radio_props[Oindex].push({label: c, value: 1});
+                                    radio_props[Oindex].push({label: c, value: 1, itemID: item.id});
 
                                     // return (
                                     //     <View key={item.id} style={styles.infoRow}>
@@ -330,8 +399,10 @@ export default class SurveyFill extends React.Component {
                                     buttonColor={color2}
                                     labelStyle={styles.giftCardCode}
                                     wrapStyle={styles.radio}
-                                    onPress={(value) => {
-                                        this.setState({value: value})
+                                    onPress={(v,i) => {
+                                        // console.log('eeeheeee',value,ll)
+                                        radio_props[Oindex][i].value = 0;
+                                        // this.setState({value: value})
                                     }}
                                 />
                             </View>
@@ -364,10 +435,60 @@ export default class SurveyFill extends React.Component {
             // Error retrieving data
         }
     };
-    logOut = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate('Auth');
+    submitSurvey =  () => {
+        let radio_props = this.state.questionsItems;
+        // console.log('here',radio_props)
+        let itemsList = [];
+        for (iter in radio_props) {
+            for (j in radio_props[iter]) {
+                if (radio_props[iter][j].value === 0) {
+                    itemsList.push(radio_props[iter][j].itemID);
+                } else {
+                    // console.log('else',j);
+
+                }
+            }
+        }
+        this.setState({itemsList: itemsList});
+        this.uploadSurvey(itemsList);
     };
+    uploadSurvey = async (itemsList) => {
+        fetch('http://127.0.0.1:5000/api/submitFilling', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({"items": itemsList})
+        })
+            .then((response) => {
+                // console.log('response', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                // console.log('json', responseJson);
+                // this.setState({email: responseJson["user"]["email"]});
+                // this.setState({name: responseJson["user"]["name"]});
+                // this.setState({credit: String(responseJson["user"]["credit"])});
+                // this.setState({role: responseJson["user"]["role"]});
+                // this.setState({id: String(responseJson["user"]["id"])});
+                // this.setState({status: responseJson["status"]});
+                // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                if (responseJson.status === "OK") {
+                    // console.log('heleeee',responseJson)
+                    this.props.navigation.goBack();
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                } else {
+                    // console.log('heleeee',responseJson)
+                    this.setModalAFKVisible(true)
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+
 }
 
 const styles = StyleSheet.create({
@@ -412,7 +533,14 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'center',
-        color: '#ea24a3',
+        color: color3,
+    },
+    buyButtonLabel1: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'center',
+        color: color4,
     },
     refreshButton: {
         width: 25,
@@ -423,7 +551,14 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 5,
-        backgroundColor: '#fcc8f1',
+        backgroundColor: color4,
+        justifyContent: 'center',
+    },
+    buyButton1: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
+        backgroundColor: color2,
         justifyContent: 'center',
     },
     giftCardLabel: {
@@ -441,6 +576,7 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         paddingTop: 10,
         color: 'white',
+        marginBottom: 8,
     },
     giftCardCode: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanRegular(FaNum)",
@@ -498,7 +634,7 @@ const styles = StyleSheet.create({
         height: 100,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#fc44c5'
+        backgroundColor: color4
     },
     giftCardContainer: {
         flex: 1,
@@ -639,6 +775,13 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         backgroundColor: 'transparent',
     },
+    profileCardContainer2: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+    },
     giftHistoryCardContainer: {
         margin: 10,
         maxHeight: '100%',
@@ -677,13 +820,18 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: color2
     },
+    profileCard1: {
+        width: '100%',
+        height: 50,
+        borderRadius: 5,
+        marginBottom: 30
+    },
     giftHistoryCard: {
         width: '100%',
         borderRadius: 5,
         backgroundColor: color2,
         marginTop: 10,
         paddingTop: 0,
-        marginBottom: 30
     },
     giftHistory1Card: {
         width: '100%',
@@ -697,6 +845,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginRight: 10,
         marginLeft: 10,
+        marginBottom: 10,
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
