@@ -79,11 +79,10 @@ export default class SurveyFill extends React.Component {
                         <Text style={styles.logoLabel}>
                             Billboard
                         </Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.dispatch(DrawerActions.openDrawer())}
-                                          style={styles.TouchableOpacityboundLeft}>
+                        <TouchableOpacity
+                                          style={styles.TouchableOpacityboundLeft1}>
                             <View style={styles.TouchableOpacityboundFlexLeft}>
-                                <Image style={styles.icSidebar}
-                                       source={require('./images/icSidebar/icSidebar.png')}/>
+
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -251,47 +250,32 @@ export default class SurveyFill extends React.Component {
             .then((responseJson) => {
                 // console.log('json', responseJson);
                 if (responseJson.status === 'OK') {
-                    console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', this.state.srvyAPI);
-                    console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', responseJson.survey.questions);
+                    // console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', this.state.srvyAPI);
+                    // console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', responseJson.survey.questions);
 
                     const surveyItemListArrr = responseJson.survey.questions.map(surveyItem => (
                         <View key={surveyItem.id} style={styles.giftCardShop}>
                             <View style={styles.giftCardShopContainer}>
-                                <View style={styles.giftCardStyle}>
-                                    <View style={styles.giftCardContainer}>
-                                        <Image
-                                            style={styles.icGiftShop}
-                                            source={require('./images/icGift/icGift.png')}
-                                        />
-                                        <View style={styles.giftCardLabelCol}>
-                                            <Text style={styles.giftCardShopLabel}>
-                                                گیفت کارت {surveyItem.context} آیتونز
+                                <Text style={styles.giftCardShopLabel}>
+                                    {surveyItem.context}
+                                </Text>
+                                { surveyItem.items.map(item => {
+                                    return (
+                                        <View key={item.id} style={styles.infoRow}>
+
+                                            <Text style={styles.giftCardCode}>
+                                                {item.context}
                                             </Text>
-                                            <View style={styles.infoRow}>
-                                                <Text style={styles.giftCardCode}>
-                                                    {surveyItem.context}
-                                                </Text>
-                                                <View style={styles.infoLabelShop}>
-                                                    <Image
-                                                        source={require('./images/icCreditWhite/icCreditWhite.png')}
-                                                        style={styles.infoIcon}
-                                                    />
-                                                </View>
+                                            <View style={styles.infoLabelShop}>
+                                                <Image
+                                                    source={require('./images/icCreditWhite/icCreditWhite.png')}
+                                                    style={styles.infoIcon}
+                                                />
                                             </View>
                                         </View>
-                                    </View>
-                                </View>
-                                <View style={styles.giftCardBuyStyle}>
-                                    <View style={styles.giftCardBuyContainer}>
-                                        <TouchableOpacity style={styles.buyButton}
-                                                          onPress={() => this.buyGift(surveyItem)}
-                                        >
-                                            <Text style={styles.buyButtonLabel1}>
-                                                خرید
-                                            </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
+                                    );
+                                })
+                                }
                             </View>
                         </View>
                     ));
@@ -436,7 +420,7 @@ const styles = StyleSheet.create({
     },
     giftCardShop: {
         width: '100%',
-        height: 150,
+        maxHeight: '100%',
         marginTop: 10,
         borderRadius: 5,
         backgroundColor: color1
@@ -473,7 +457,7 @@ const styles = StyleSheet.create({
     },
     giftCardStyle: {
         width: '100%',
-        height: '70%'
+        height: '100%'
     },
     giftCardFailStyle: {
         width: '100%',
@@ -501,8 +485,8 @@ const styles = StyleSheet.create({
     giftCardShopContainer: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
         paddingLeft: 10,
         paddingRight: 10
     },
@@ -637,7 +621,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: color2,
         marginTop: 10,
-        paddingTop: 0
+        paddingTop: 0,
+        marginBottom: 30
     },
     giftHistory1Card: {
         width: '100%',
@@ -819,6 +804,12 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         marginLeft: 10,
+    },
+    TouchableOpacityboundLeft1: {
+        width: 50,
+        height: 50,
+        marginLeft: 10,
+        opacity: 0
     },
     TouchableOpacityboundFlexLeft: {
         flex: 1,
