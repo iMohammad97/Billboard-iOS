@@ -17,12 +17,11 @@ const color2 = '#f3f4f7';
 const color3 = '#ffffff';
 const color4 = '#f97173';
 
-export default class GiftSHop extends React.Component {
+export default class Survey extends React.Component {
     constructor(props) {
         super(props);
         this.loadUser();
-        this.loadGiftHistory();
-        this.loadGiftShop();
+        this.loadSurveys();
     };
 
     state = {
@@ -51,10 +50,10 @@ export default class GiftSHop extends React.Component {
     static navigationOptions = {
         header: null,
         title: 'Billboard',
-        drawerLabel: 'گیفت شاپ',
+        drawerLabel: 'نظر سنجی',
         drawerIcon: ({tintColor}) => (
             <Image
-                source={require('./images/icGiftShop/icGiftShop.png')}
+                source={require('./images/icSurvey/icSurvey.png')}
                 style={[styles.sideIcon, {tintColor: tintColor}]}
             />
         ),
@@ -135,20 +134,13 @@ export default class GiftSHop extends React.Component {
                     <ScrollView style={styles.mainContainerScrollView} showsVerticalScrollIndicator={false}>
                         <View style={styles.giftHistoryCard}>
                             <View style={styles.giftHistoryCardBarContainer}>
-                                <TouchableOpacity style={styles.refreshButton}
-                                                  onPress={() => this.loadGiftShop()}
-                                >
-                                    <Image
-                                        source={require('./images/icRefresh/icRefresh.png')}
-                                        style={styles.refreshIcon}
-                                    />
-                                </TouchableOpacity>
+
                                 <Text style={styles.infoLabel1}>
-                                    گیفت شاپ
+                                    نظر سنجی های موجود
                                 </Text>
                             </View>
-                            <View style={styles.giftHistoryCardContainer}>
-                                {this.state.giftShopListArr}
+                            <View style={styles.giftHistoryCardContainer2}>
+                                {this.state.surveysListArr}
                                 {/*<View style={styles.infoRow}>*/}
                                 {/*<Text style={styles.infoData}>*/}
                                 {/*{this.state.email}*/}
@@ -159,95 +151,34 @@ export default class GiftSHop extends React.Component {
                                 {/*</View>*/}
                             </View>
                         </View>
-                        <View style={styles.giftHistory1Card}>
-                            <View style={styles.giftHistoryCardBarContainer}>
-                                <TouchableOpacity style={styles.refreshButton}
-                                                  onPress={() => this.loadGiftHistory()}
-                                >
-                                    <Image
-                                        source={require('./images/icRefresh/icRefresh.png')}
-                                        style={styles.refreshIcon}
-                                    />
-                                </TouchableOpacity>
-                                <Text style={styles.infoLabel1}>
-                                    تاریخچه گیفت های دریافتی
-                                </Text>
-                            </View>
-                            <View style={styles.giftHistoryCardContainer1}>
-                                {this.state.historyListArr}
-                                {/*<View style={styles.infoRow}>*/}
-                                {/*<Text style={styles.infoData}>*/}
-                                {/*{this.state.email}*/}
+                        {/*<View style={styles.giftHistory1Card}>*/}
+                            {/*<View style={styles.giftHistoryCardBarContainer}>*/}
+                                {/*<TouchableOpacity style={styles.refreshButton}*/}
+                                                  {/*onPress={() => this.loadGiftHistory()}*/}
+                                {/*>*/}
+                                    {/*<Image*/}
+                                        {/*source={require('./images/icRefresh/icRefresh.png')}*/}
+                                        {/*style={styles.refreshIcon}*/}
+                                    {/*/>*/}
+                                {/*</TouchableOpacity>*/}
+                                {/*<Text style={styles.infoLabel1}>*/}
+                                    {/*تاریخچه گیفت های دریافتی*/}
                                 {/*</Text>*/}
-                                {/*<Text style={styles.infoLabel}>*/}
-                                {/*ایمیل:*/}
-                                {/*</Text>*/}
-                                {/*</View>*/}
-                            </View>
-                        </View>
+                            {/*</View>*/}
+                            {/*<View style={styles.giftHistoryCardContainer1}>*/}
+                                {/*{this.state.historyListArr}*/}
+                                {/*/!*<View style={styles.infoRow}>*!/*/}
+                                {/*/!*<Text style={styles.infoData}>*!/*/}
+                                {/*/!*{this.state.email}*!/*/}
+                                {/*/!*</Text>*!/*/}
+                                {/*/!*<Text style={styles.infoLabel}>*!/*/}
+                                {/*/!*ایمیل:*!/*/}
+                                {/*/!*</Text>*!/*/}
+                                {/*/!*</View>*!/*/}
+                            {/*</View>*/}
+                        {/*</View>*/}
                     </ScrollView>
                 </View>
-                <Modal
-                    animationIn="zoomIn"
-                    animationOut="zoomOut"
-                    // animationInTiming={600}
-                    // animationOutTiming={600}
-                    hideModalContentWhileAnimating={true}
-                    onBackdropPress={() => this.setState({giftCardCode: false})}
-                    isVisible={this.state.giftCardCode}
-                    style={{margin: 0, marginTop: 40, height: 90, justifyContent: 'center', alignItems: 'center'}}
-                >
-                    <View style={styles.giftCardShopModal}>
-                        <View style={styles.giftCardShopContainer}>
-                            <View style={styles.giftCardStyle}>
-                                <View style={styles.giftCardContainer}>
-                                    <Image
-                                        style={styles.icGiftShop}
-                                        source={require('./images/icGift/icGift.png')}
-                                    />
-                                    <View style={styles.giftCardLabelCol}>
-                                        <Text style={styles.giftCardShopLabel}>
-                                            گیفت کارت {this.state.giftDescription} آیتونز
-                                        </Text>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.giftCardCode}>
-                                                {this.state.giftCost}
-                                            </Text>
-                                            <View style={styles.infoLabelShop}>
-                                                <Image
-                                                    source={require('./images/icCreditWhite/icCreditWhite.png')}
-                                                    style={styles.infoIcon}
-                                                />
-                                            </View>
-                                        </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.giftCardCode}>
-                                                {this.state.giftCode}
-                                            </Text>
-                                            <View style={styles.infoLabelShop}>
-                                                <Image
-                                                    source={require('./images/icBarcode/icBarcode.png')}
-                                                    style={styles.infoIcon}
-                                                />
-                                            </View>
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={styles.giftCardBuyStyle}>
-                                <View style={styles.giftCardBuyContainer}>
-                                    <TouchableOpacity style={styles.buyButton}
-                                                      onPress={() => this.setState({giftCardCode: false})}
-                                    >
-                                        <Text style={styles.buyButtonLabel1}>
-                                            باشه
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
                 <Modal
                     animationIn="zoomIn"
                     animationOut="zoomOut"
@@ -262,7 +193,7 @@ export default class GiftSHop extends React.Component {
                         <View style={styles.giftCardShopContainer}>
                             <View style={styles.giftCardFailStyle}>
                                 <Text style={styles.giftCardShopLabel}>
-                                    موجودی حساب شما کافی نیست !
+                                    قبلا این نظر سنجی را پاسخ داده اید !
                                 </Text>
                             </View>
                             <View style={styles.giftCardBuyFailStyle}>
@@ -335,19 +266,107 @@ export default class GiftSHop extends React.Component {
         await AsyncStorage.setItem('status', this.state.status);
         await AsyncStorage.setItem('id', this.state.id);
     };
+
     setModalResultVisible = (visible, giftshop) => {
         this.setState({giftDescription: giftshop.description});
         this.setState({giftCost: giftshop.cost});
         this.setState({giftCode: giftshop.code});
         this.setState({giftCardCode: visible});
     };
-    setModalResultFailVisible = (visible, giftshop) => {
+    setModalResultFailVisible = (visible) => {
         this.setState({giftCardFail: visible});
     };
-    buyGift = async (giftshop) => {
-        // console.log('rgiiiiiiiiiiiid', giftshop.id)
-        fetch('http://127.0.0.1:5000/api/shoppingresult/' + giftshop.id, {
-            method: 'POST',
+
+    loadSurveys = async () => {
+        fetch('http://127.0.0.1:5000/api/showSurvey', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                // console.log('respoooonse', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                    if (responseJson.status === 'OK') {
+
+                        // console.log("respoooooonse", responseJson.history);
+                        const surveysListArrr = responseJson.surveys.map(surveyItem => (
+                            <View key={surveyItem.id} style={styles.giftCardShop}>
+                                <View style={styles.giftCardShopContainer}>
+                                    <View style={styles.giftCardStyle}>
+                                        <View style={styles.surveyContainer}>
+                                            <View style={styles.giftCardLabelCol}>
+                                                <View style={styles.infoRow}>
+                                                    <Text style={styles.giftCardCode}>
+                                                        {surveyItem.description}
+                                                    </Text>
+                                                    <View style={styles.infoLabelShop}>
+                                                        <Text style={styles.surveyLabels}>
+                                                            عنوان :
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                                <View style={styles.infoRow}>
+                                                    <Text style={styles.giftCardCode}>
+                                                        {surveyItem.credit}
+                                                    </Text>
+                                                    <View style={styles.infoLabelShop}>
+                                                        <Text style={styles.surveyLabels}>
+                                                            امتیاز :
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                                <View style={styles.infoRow}>
+                                                    <Text style={styles.giftCardCode}>
+                                                        {surveyItem.expiration_date.slice(0, surveyItem.expiration_date.search("T"))}
+                                                    </Text>
+                                                    <View style={styles.infoLabelShop}>
+                                                        <Text style={styles.surveyLabels}>
+                                                            تاریخ اعتبار :
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <View style={styles.giftCardBuyStyle}>
+                                        <View style={styles.giftCardBuyContainer}>
+                                            <TouchableOpacity style={styles.buyButton}
+                                                              onPress={() => this.getSurveyPage(surveyItem)}
+                                            >
+                                                <Text style={styles.buyButtonLabel}>
+                                                    انتخاب
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        ));
+                        this.setState({surveysListArr: surveysListArrr});
+                    }
+                    // this.setState({giftCode: responseJson["history"]["code"]});
+                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
+                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
+                    // this.setState({date: responseJson["history"]["date"]});
+                    // this.setState({description: responseJson["history"]["description"]});
+                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
+                    // this.setState({giftHistoryStatus: responseJson["status"]});
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                }
+            )
+            .catch((error) => {
+                // console.error(error);
+            });
+    };
+    getSurveyPage = async (surveyItem) => {
+        // console.log('rgiiiiiiiiiiiid', surveyItem.id)
+        fetch('http://127.0.0.1:5000/api/fillSurvey/' + surveyItem.id, {
+            method: 'GET',
             credentials: 'include',
             headers: {
                 Accept: 'application/json',
@@ -361,8 +380,13 @@ export default class GiftSHop extends React.Component {
             .then((responseJson) => {
                 // console.log('json', responseJson);
                 if (responseJson.status === 'OK') {
-                    this.setModalResultVisible(true, giftshop);
-                } else if (responseJson.status === 'not enough credit') {
+                    this.setState({srvyTitle: responseJson["survey"]["title"]});
+                    this.setState({srvyDescription: responseJson["survey"]["description"]});
+                    this.setState({srvyCredit: String(responseJson["survey"]["credit"])});
+                    this.setState({srvyExpDate: responseJson["survey"]["expiration_date"]});
+                    this.setState({srvyID: String(responseJson["survey"]["id"])});
+                    this.saveSurvey();
+                } else if (responseJson.status === 'user has already filled this survey') {
                     this.setModalResultFailVisible(true);
                 }
             })
@@ -370,131 +394,13 @@ export default class GiftSHop extends React.Component {
                 console.error(error);
             });
     };
-
-    loadGiftShop = async () => {
-        fetch('http://127.0.0.1:5000/api/giftshop', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                // console.log('respoooonse', response);
-                return response.json();
-            })
-            .then((responseJson) => {
-                    if (responseJson.status === 'OK') {
-
-                        // console.log("respoooooonse", responseJson.history);
-                        const giftShopListArrr = responseJson.gifts.map(giftShopItem => (
-                            <View key={giftShopItem.id} style={styles.giftCardShop}>
-                                <View style={styles.giftCardShopContainer}>
-                                    <View style={styles.giftCardStyle}>
-                                        <View style={styles.giftCardContainer}>
-                                            <Image
-                                                style={styles.icGiftShop}
-                                                source={require('./images/icGift/icGift.png')}
-                                            />
-                                            <View style={styles.giftCardLabelCol}>
-                                                <Text style={styles.giftCardShopLabel}>
-                                                    گیفت کارت {giftShopItem.description} آیتونز
-                                                </Text>
-                                                <View style={styles.infoRow}>
-                                                    <Text style={styles.giftCardCode}>
-                                                        {giftShopItem.cost}
-                                                    </Text>
-                                                    <View style={styles.infoLabelShop}>
-                                                        <Image
-                                                            source={require('./images/icCreditWhite/icCreditWhite.png')}
-                                                            style={styles.infoIcon}
-                                                        />
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <View style={styles.giftCardBuyStyle}>
-                                        <View style={styles.giftCardBuyContainer}>
-                                            <TouchableOpacity style={styles.buyButton}
-                                                              onPress={() => this.buyGift(giftShopItem)}
-                                            >
-                                                <Text style={styles.buyButtonLabel1}>
-                                                    خرید
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>
-                        ));
-                        this.setState({giftShopListArr: giftShopListArrr});
-                    }
-                    // this.setState({giftCode: responseJson["history"]["code"]});
-                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
-                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
-                    // this.setState({date: responseJson["history"]["date"]});
-                    // this.setState({description: responseJson["history"]["description"]});
-                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
-                    // this.setState({giftHistoryStatus: responseJson["status"]});
-                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
-                }
-            )
-            .catch((error) => {
-                // console.error(error);
-            });
-    };
-
-    loadGiftHistory = async () => {
-        fetch('http://127.0.0.1:5000/api/gifthistory', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                // console.log('respoooonse', response);
-                return response.json();
-            })
-            .then((responseJson) => {
-                    if (responseJson.status === 'OK') {
-                        // console.log("respoooooonse", responseJson.history);
-                        const historyListArrr = responseJson.history.map(historyItem => (
-                            <View key={historyItem.id} style={styles.giftCard}>
-                                <View style={styles.giftCardContainer}>
-                                    <Image
-                                        style={styles.icGift}
-                                        source={require('./images/icGift/icGift.png')}
-                                    />
-                                    <View style={styles.giftCardLabelCol}>
-                                        <Text style={styles.giftCardLabel}>
-                                            گیفت کارت {historyItem.description} آیتونز
-                                        </Text>
-                                        <Text style={styles.giftCardCode}>
-                                            {historyItem.code}
-                                        </Text>
-                                    </View>
-                                </View>
-                            </View>
-                        ));
-                        this.setState({historyListArr: historyListArrr});
-                    }
-                    // this.setState({giftCode: responseJson["history"]["code"]});
-                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
-                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
-                    // this.setState({date: responseJson["history"]["date"]});
-                    // this.setState({description: responseJson["history"]["description"]});
-                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
-                    // this.setState({giftHistoryStatus: responseJson["status"]});
-                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
-                }
-            )
-            .catch((error) => {
-                // console.error(error);
-            });
+    saveSurvey = async () => {
+        await AsyncStorage.setItem('srvyTitle', this.state.srvyTitle);
+        await AsyncStorage.setItem('srvyDescription', this.state.srvyDescription);
+        await AsyncStorage.setItem('srvyCredit', this.state.srvyCredit);
+        await AsyncStorage.setItem('srvyExpDate', this.state.srvyExpDate);
+        await AsyncStorage.setItem('srvyID', this.state.srvyID);
+        this.props.navigation.navigate('SurveyFill');
     };
 
     loadUser = async () => {
@@ -563,7 +469,7 @@ const styles = StyleSheet.create({
     giftHistoryCardBarContainer: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         paddingLeft: 10
     },
@@ -578,13 +484,6 @@ const styles = StyleSheet.create({
         color: color1,
     },
     buyButtonLabel: {
-        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
-        fontSize: 17,
-        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
-        textAlign: 'center',
-        color: color4,
-    },
-    buyButtonLabel1: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
@@ -627,6 +526,14 @@ const styles = StyleSheet.create({
         paddingRight: 0,
         color: 'white',
     },
+    surveyLabels: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
+        textAlign: 'right',
+        paddingRight: 0,
+        color: 'white',
+    },
     giftCardLabelCol: {
         flex: 1,
         flexDirection: 'column',
@@ -646,7 +553,7 @@ const styles = StyleSheet.create({
         height: 70,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: color1
+        backgroundColor: '#fc44c5'
     },
     giftCardShop: {
         width: '100%',
@@ -660,16 +567,24 @@ const styles = StyleSheet.create({
         height: 180,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: color1
+        backgroundColor: '#fc44c5'
     },
     giftCardFailModal: {
         width: '90%',
         height: 100,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: color4
+        backgroundColor: color1
     },
     giftCardContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+    surveyContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -816,7 +731,18 @@ const styles = StyleSheet.create({
         maxHeight: '100%',
         // paddingTop: 0,
         flex: 1,
-        flexDirection: 'column-reverse',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+        backgroundColor: 'transparent',
+    },
+    giftHistoryCardContainer2: {
+        margin: 10,
+        marginTop: 0,
+        maxHeight: '100%',
+        // paddingTop: 0,
+        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
         backgroundColor: 'transparent',
@@ -837,7 +763,7 @@ const styles = StyleSheet.create({
     giftHistory1Card: {
         width: '100%',
         borderRadius: 5,
-        backgroundColor: color2,
+        backgroundColor: '#fcc8f1',
         marginTop: 10,
         paddingTop: 0,
         marginBottom: 30

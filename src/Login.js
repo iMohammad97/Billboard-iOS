@@ -13,6 +13,10 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import RadioButton from 'react-native-radio-button';
+const color1 = '#203b61';
+const color2 = '#f3f4f7';
+const color3 = '#ffffff';
+const color4 = '#f97173';
 
 export default class LoginScreen extends Component<Props> {
     constructor(props) {
@@ -119,9 +123,16 @@ export default class LoginScreen extends Component<Props> {
                                 {this.state.errorConsole}
                             </Text>
                             <TextInput style={styles.textInputStyle} placeholder="نام کاربری"
+                                       autoCapitalize='none'
+                                       placeholderTextColor={color2}
+                                       autoCorrect={false}
                                        onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
                             <View style={{height: 10}}/>
                             <TextInput style={styles.textInputStyle} placeholder="رمز عبور"
+                                       autoCapitalize='none'
+                                       placeholderTextColor={color2}
+                                       autoCorrect={false}
+                                       secureTextEntry={true}
                                        onChangeText={(textInputPassword) => this.setState({textInputPassword})}/>
                             <View style={{height: 20}}/>
                             <View style={styles.containerRadioInput}>
@@ -132,8 +143,8 @@ export default class LoginScreen extends Component<Props> {
                                     <RadioButton
                                         animation={'bounceIn'}
                                         isSelected={this.state.rememberMe}
-                                        innerColor={'#8BEADF'}
-                                        outerColor={'#8BEADF'}
+                                        innerColor={color4}
+                                        outerColor={color4}
                                         onPress={() => this.setState({rememberMe: !this.state.rememberMe})}
                                     />
                                 </View>
@@ -195,7 +206,7 @@ const styles = StyleSheet.create({
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         borderColor: 'green',
         textAlign: 'center',
-        color: 'white',
+        color: color4,
         marginTop: 10
     },
     alertPopUpWindow: {
@@ -214,7 +225,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 5,
         marginTop: 10,
-        backgroundColor: '#8BEADF',
+        backgroundColor: color4,
     },
     icFingerprint: {
         width: 60,
@@ -243,7 +254,7 @@ const styles = StyleSheet.create({
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         borderColor: '#8BEADF',
         textAlign: 'right',
-        color: '#433E53',
+        color: color2,
     },
     textInputStyle: {
         width: '60%',
@@ -253,7 +264,7 @@ const styles = StyleSheet.create({
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
         fontSize: 12,
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
-        borderColor: '#8BEADF',
+        borderColor: color4,
         textAlign: 'right',
         color: 'white',
         paddingRight: 5,
@@ -295,7 +306,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
     },
     containerFlex: {
         flex: 1,
@@ -333,7 +344,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     navigationBar: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: 30,
     },
@@ -390,7 +401,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     navigationBase: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: 50, //109
         shadowColor: "rgba(67, 82, 87, 0.4)",

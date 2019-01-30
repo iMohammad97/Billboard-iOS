@@ -14,8 +14,13 @@ import LoginScreen from "./src/Login.js";
 import SignUpScreen from "./src/Signup.js";
 import HomeScreen from "./src/Home.js";
 import GiftShop from "./src/GiftShop.js";
+import Survey from "./src/Survey.js";
+import SurveyFill from "./src/SurveyFill.js";
 import {createStackNavigator, createSwitchNavigator, createAppContainer, createDrawerNavigator, DrawerItems} from 'react-navigation';
-
+const color1 = '#203b61';
+const color2 = '#f3f4f7';
+const color3 = '#ffffff';
+const color4 = '#f97173';
 
 class AuthLoadingScreen extends React.Component {
     constructor() {
@@ -67,17 +72,19 @@ const DrawerContent = (props) => (
         <DrawerItems {...props} />
     </View>
 );
-const AppStack = createStackNavigator({Home: HomeScreen, GiftShop: GiftShop});
+const AppStack = createStackNavigator({Home: HomeScreen, GiftShop: GiftShop, Survey: Survey, SurveyFill: SurveyFill});
 const AuthStack = createStackNavigator({LogIn: LoginScreen, SignUp: SignUpScreen});
 const drw = createDrawerNavigator(
     {
         Home: HomeScreen,
-        GiftShop: GiftShop
+        GiftShop: GiftShop,
+        Survey: Survey,
     }, {
         drawerPosition: 'right',
-        drawerBackgroundColor: '#fcc8f1',
+        drawerBackgroundColor: color2,
         contentOptions: {
-            activeTintColor: '#ea24a3',
+            activeTintColor: color4,
+            inactiveTintColor: color1,
             labelStyle: {
                 fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
                 fontSize: 15,
@@ -113,7 +120,7 @@ const styles = StyleSheet.create({
     profileCard: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#fc44c5'
+        backgroundColor: color1
     },
     profileCardContainer: {
         margin: 10,

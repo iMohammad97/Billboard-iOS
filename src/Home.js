@@ -12,7 +12,10 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import { DrawerActions } from 'react-navigation';
-
+const color1 = '#203b61';
+const color2 = '#f3f4f7';
+const color3 = '#ffffff';
+const color4 = '#f97173';
 export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -191,12 +194,12 @@ export default class HomeScreen extends React.Component {
             },
         })
             .then((response) => {
-                console.log('respoooonse', response);
+                // console.log('respoooonse', response);
                 return response.json();
             })
             .then((responseJson) => {
                     if (responseJson.status === 'OK') {
-                        console.log("respoooooonse", responseJson.history);
+                        // console.log("respoooooonse", responseJson.history);
                         const historyListArrr = responseJson.history.map(historyItem => (
                             <View key={historyItem.id} style={styles.giftCard}>
                                 <View style={styles.giftCardContainer}>
@@ -297,6 +300,33 @@ export default class HomeScreen extends React.Component {
     };
 
     signOutAsync = async () => {
+        fetch('http://127.0.0.1:5000/api/logout', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                // console.log('respoooonse', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                    if (responseJson.status === 'OK') {
+                        // console.log("respoooooonse", responseJson.history);
+                        this.logOut();
+                    } else {
+                        this.logOut();
+                    }
+                }
+            )
+            .catch((error) => {
+                // console.error(error);
+                this.logOut();
+            });
+    };
+    logOut = async () => {
         await AsyncStorage.clear();
         this.props.navigation.navigate('Auth');
     };
@@ -311,7 +341,7 @@ const styles = StyleSheet.create({
     giftHistory1Card: {
         width: '100%',
         borderRadius: 5,
-        backgroundColor: '#fcc8f1',
+        backgroundColor: color2,
         marginTop: 10,
         paddingTop: 0,
         marginBottom: 30
@@ -322,7 +352,7 @@ const styles = StyleSheet.create({
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'right',
         paddingRight: 0,
-        color: 'white',
+        color: color3,
     },
     giftCardCode: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanRegular(FaNum)",
@@ -347,7 +377,7 @@ const styles = StyleSheet.create({
         height: 70,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#fc44c5'
+        backgroundColor: color1
     },
     giftCardContainer: {
         flex: 1,
@@ -361,7 +391,7 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
-        borderColor: '#ea24a3',
+        borderColor: color1,
         borderWidth: 3,
     },
     infoIcon: {
@@ -382,7 +412,7 @@ const styles = StyleSheet.create({
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         textAlign: 'right',
         paddingRight: 5,
-        color: '#ea24a3',
+        color: color1,
     },
     infoLabel: {
         paddingBottom: 5,
@@ -400,7 +430,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'right',
-        color: '#ea24a3',
+        color: color1,
     },
     infoColumn: {
         width: '50%',
@@ -463,7 +493,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 120,
         borderRadius: 5,
-        backgroundColor: '#fcc8f1'
+        backgroundColor: color2
     },
     giftHistoryCard: {
         width: '100%',
@@ -623,7 +653,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     navigationBar: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: 30,
     },
@@ -678,7 +708,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     navigationBase: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: 50, //109
         shadowColor: "rgba(67, 82, 87, 0.4)",

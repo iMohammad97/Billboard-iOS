@@ -13,6 +13,11 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import RadioButton from 'react-native-radio-button';
+const color1 = '#203b61';
+const color2 = '#f3f4f7';
+const color3 = '#ffffff';
+const color4 = '#f97173';
+
 export default class SignUpScreen extends Component<Props> {
     constructor(props) {
         super(props);
@@ -38,7 +43,7 @@ export default class SignUpScreen extends Component<Props> {
                 this.setState({status: responseJson["status"]});
                 // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 if (this.state.status === "OK") {
-                    this.signUpAndSignInAsync()
+                    this.handleLogin()
                     // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
                 } else {
                     let err = this.state.status;
@@ -57,7 +62,7 @@ export default class SignUpScreen extends Component<Props> {
             .catch((error) => {
                 console.error(error);
             });
-    }
+    };
 
     state = {
         // Text inputs :
@@ -80,6 +85,50 @@ export default class SignUpScreen extends Component<Props> {
     static navigationOptions = {
         header: null,
     };
+    handleLogin = async () => {
+        fetch('http://127.0.0.1:5000/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({"email": this.state.textInputUsername, "password": this.state.textInputPassword})
+        })
+            .then((response) =>  {
+                // console.log('response', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                // console.log('json', responseJson);
+                this.setState({email: responseJson["user"]["email"]});
+                this.setState({name: responseJson["user"]["name"]});
+                this.setState({credit: String(responseJson["user"]["credit"])});
+                this.setState({role: responseJson["user"]["role"]});
+                this.setState({id: String(responseJson["user"]["id"])});
+                this.setState({status: responseJson["status"]});
+                // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                if (this.state.status === "OK") {
+                    this.signUpAndSignInAsync()
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                } else {
+                    let err = this.state.status;
+                    switch (err) {
+                        case "password incorrect":
+                            this.setState({errorConsole: "خطا:‌ رمز عبور اشتباه است"});
+                            break;
+                        case "user not found":
+                            this.setState({errorConsole: "خطا    : نام کاربری یافت نشد"});
+                            break;
+                        default:
+                            this.setState({errorConsole: "خطا: عدم ارتباط با سرور"});
+                    }
+                    ;
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 
     signUpAndSignInAsync = async () => {
         await AsyncStorage.setItem('credit', this.state.credit);
@@ -88,6 +137,7 @@ export default class SignUpScreen extends Component<Props> {
         await AsyncStorage.setItem('role', this.state.role);
         await AsyncStorage.setItem('status', this.state.status);
         await AsyncStorage.setItem('id', this.state.id);
+
         this.props.navigation.navigate('App');
     };
 
@@ -122,12 +172,22 @@ export default class SignUpScreen extends Component<Props> {
                                 {this.state.errorConsole}
                             </Text>
                             <TextInput style={styles.textInputStyle} placeholder="نام"
+                                       autoCapitalize='none'
+                                       autoCorrect={false}
+                                       placeholderTextColor={color2}
                                        onChangeText={(textInputName) => this.setState({textInputName})}/>
                             <View style={{height: 10}}/>
                             <TextInput style={styles.textInputStyle} placeholder="ایمیل"
+                                       autoCapitalize='none'
+                                       placeholderTextColor={color2}
+                                       autoCorrect={false}
                                        onChangeText={(textInputUsername) => this.setState({textInputUsername})}/>
                             <View style={{height: 10}}/>
                             <TextInput style={styles.textInputStyle} placeholder="رمز عبور"
+                                       autoCapitalize='none'
+                                       autoCorrect={false}
+                                       placeholderTextColor={color2}
+                                       secureTextEntry={true}
                                        onChangeText={(textInputPassword) => this.setState({textInputPassword})}/>
                             <View style={{height: 20}}/>
                             <View style={styles.containerRadioInput}>
@@ -138,8 +198,8 @@ export default class SignUpScreen extends Component<Props> {
                                     <RadioButton
                                         animation={'bounceIn'}
                                         isSelected={this.state.rememberMe}
-                                        innerColor={'#8BEADF'}
-                                        outerColor={'#8BEADF'}
+                                        innerColor={color4}
+                                        outerColor={color4}
                                         onPress={() => this.setState({rememberMe: !this.state.rememberMe})}
                                     />
                                 </View>
@@ -180,7 +240,7 @@ const styles = StyleSheet.create({
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
         borderColor: 'green',
         textAlign: 'center',
-        color: 'white',
+        color: color4,
         marginTop: 10
     },
     alertPopUpWindow: {
@@ -199,7 +259,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 5,
         marginTop: 10,
-        backgroundColor: '#8BEADF',
+        backgroundColor: color4,
     },
     icFingerprint: {
         width: 60,
@@ -232,7 +292,7 @@ const styles = StyleSheet.create({
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         borderColor: '#8BEADF',
         textAlign: 'right',
-        color: '#433E53',
+        color: color3,
     },
     textInputStyle: {
         width: '60%',
@@ -242,7 +302,7 @@ const styles = StyleSheet.create({
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanRegular",
         fontSize: 12,
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
-        borderColor: '#8BEADF',
+        borderColor: color4,
         textAlign: 'right',
         color: 'white',
         paddingRight: 5,
@@ -284,7 +344,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         width: '100%',
         height: '90%',
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
     },
     containerFlex: {
         flex: 1,
@@ -322,7 +382,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     navigationBar: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: 30,
     },
@@ -380,7 +440,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     navigationBase: {
-        backgroundColor: '#fc44c5',
+        backgroundColor: color1,
         width: '100%',
         height: "10%", //109
     },

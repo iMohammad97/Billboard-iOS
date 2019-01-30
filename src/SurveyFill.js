@@ -1,28 +1,36 @@
 import React from 'react';
 import {
-    ActivityIndicator,
     AsyncStorage,
-    Button, Image,
-    StatusBar,
-    StyleSheet, Text, TouchableOpacity,
-    View,
+    Image,
     Platform,
-    Alert,
     ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
+// import RadioButton from 'react-native-radio-button';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Modal from "react-native-modal";
-import {DrawerActions} from "react-navigation";
+
+
+var radio_props = [
+    {label: 'param1', value: 0},
+    {label: 'param2', value: 1}
+];
+
 const color1 = '#203b61';
 const color2 = '#f3f4f7';
 const color3 = '#ffffff';
 const color4 = '#f97173';
 
-export default class GiftSHop extends React.Component {
+export default class SurveyFill extends React.Component {
     constructor(props) {
         super(props);
         this.loadUser();
-        this.loadGiftHistory();
-        this.loadGiftShop();
+        this.loadSurvey();
+        // this.getSurveyItems();
     };
 
     state = {
@@ -30,6 +38,7 @@ export default class GiftSHop extends React.Component {
         signupView: true,
         giftCardCode: false,
         giftCardFail: false,
+        userAFK: false,
         userInfo: '',
         // API fetched data states:
         credit: '',
@@ -46,15 +55,19 @@ export default class GiftSHop extends React.Component {
         description: '',
         giftDBId: '',
         giftHistoryStatus: '',
+        //answers state
+
     };
+
+
 
     static navigationOptions = {
         header: null,
         title: 'Billboard',
-        drawerLabel: 'گیفت شاپ',
+        drawerLabel: 'نظر سنجی',
         drawerIcon: ({tintColor}) => (
             <Image
-                source={require('./images/icGiftShop/icGiftShop.png')}
+                source={require('./images/icSurvey/icSurvey.png')}
                 style={[styles.sideIcon, {tintColor: tintColor}]}
             />
         ),
@@ -68,21 +81,20 @@ export default class GiftSHop extends React.Component {
                 <View style={styles.navigationBar}/>
                 <View style={styles.navigationBase}>
                     <View style={styles.navigationBaseItems}>
-                        <TouchableOpacity onPress={this.signOutAsync}
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}
                                           style={styles.TouchableOpacityboundLeft}>
                             <View style={styles.TouchableOpacityboundFlexLeft}>
                                 <Image style={styles.icLogout}
-                                       source={require('./images/icLougout/icLougout.png')}/>
+                                       source={require('./images/icPrevious/icPreviousWhite.png')}/>
                             </View>
                         </TouchableOpacity>
                         <Text style={styles.logoLabel}>
                             Billboard
                         </Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.dispatch(DrawerActions.openDrawer())}
-                                          style={styles.TouchableOpacityboundLeft}>
+                        <TouchableOpacity
+                            style={styles.TouchableOpacityboundLeft1}>
                             <View style={styles.TouchableOpacityboundFlexLeft}>
-                                <Image style={styles.icSidebar}
-                                       source={require('./images/icSidebar/icSidebar.png')}/>
+
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -135,57 +147,35 @@ export default class GiftSHop extends React.Component {
                     <ScrollView style={styles.mainContainerScrollView} showsVerticalScrollIndicator={false}>
                         <View style={styles.giftHistoryCard}>
                             <View style={styles.giftHistoryCardBarContainer}>
-                                <TouchableOpacity style={styles.refreshButton}
-                                                  onPress={() => this.loadGiftShop()}
-                                >
-                                    <Image
-                                        source={require('./images/icRefresh/icRefresh.png')}
-                                        style={styles.refreshIcon}
-                                    />
-                                </TouchableOpacity>
+                                {/*<TouchableOpacity style={styles.refreshButton}*/}
+                                                  {/*onPress={() => this.loadGiftShop()}*/}
+                                {/*>*/}
+                                    {/*<Image*/}
+                                        {/*source={require('./images/icRefresh/icRefresh.png')}*/}
+                                        {/*style={styles.refreshIcon}*/}
+                                    {/*/>*/}
+                                {/*</TouchableOpacity>*/}
                                 <Text style={styles.infoLabel1}>
-                                    گیفت شاپ
+                                    {this.state.srvyDescription}
                                 </Text>
                             </View>
-                            <View style={styles.giftHistoryCardContainer}>
-                                {this.state.giftShopListArr}
-                                {/*<View style={styles.infoRow}>*/}
-                                {/*<Text style={styles.infoData}>*/}
-                                {/*{this.state.email}*/}
-                                {/*</Text>*/}
-                                {/*<Text style={styles.infoLabel}>*/}
-                                {/*ایمیل:*/}
-                                {/*</Text>*/}
-                                {/*</View>*/}
-                            </View>
-                        </View>
-                        <View style={styles.giftHistory1Card}>
-                            <View style={styles.giftHistoryCardBarContainer}>
-                                <TouchableOpacity style={styles.refreshButton}
-                                                  onPress={() => this.loadGiftHistory()}
-                                >
-                                    <Image
-                                        source={require('./images/icRefresh/icRefresh.png')}
-                                        style={styles.refreshIcon}
-                                    />
-                                </TouchableOpacity>
-                                <Text style={styles.infoLabel1}>
-                                    تاریخچه گیفت های دریافتی
-                                </Text>
-                            </View>
-                            <View style={styles.giftHistoryCardContainer1}>
-                                {this.state.historyListArr}
-                                {/*<View style={styles.infoRow}>*/}
-                                {/*<Text style={styles.infoData}>*/}
-                                {/*{this.state.email}*/}
-                                {/*</Text>*/}
-                                {/*<Text style={styles.infoLabel}>*/}
-                                {/*ایمیل:*/}
-                                {/*</Text>*/}
-                                {/*</View>*/}
+                            <View style={styles.giftHistoryCardContainer2}>
+                                {this.state.surveyItemListArr}
                             </View>
                         </View>
                     </ScrollView>
+                    <View style={styles.profileCard1}>
+                        <View style={styles.profileCardContainer2}>
+                            <TouchableOpacity onPress={() => this.submitSurvey()}
+                                              style={styles.buyButton}>
+                                <View style={styles.TouchableOpacityboundFlexLeft}>
+                                    <Text style={styles.buyButtonLabel}>
+                                        ثبت نظر سنجی
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
                 <Modal
                     animationIn="zoomIn"
@@ -193,51 +183,21 @@ export default class GiftSHop extends React.Component {
                     // animationInTiming={600}
                     // animationOutTiming={600}
                     hideModalContentWhileAnimating={true}
-                    onBackdropPress={() => this.setState({giftCardCode: false})}
-                    isVisible={this.state.giftCardCode}
+                    onBackdropPress={() => this.setState({giftCardFail: false})}
+                    isVisible={this.state.giftCardFail}
                     style={{margin: 0, marginTop: 40, height: 90, justifyContent: 'center', alignItems: 'center'}}
                 >
-                    <View style={styles.giftCardShopModal}>
+                    <View style={styles.giftCardFailModal}>
                         <View style={styles.giftCardShopContainer}>
-                            <View style={styles.giftCardStyle}>
-                                <View style={styles.giftCardContainer}>
-                                    <Image
-                                        style={styles.icGiftShop}
-                                        source={require('./images/icGift/icGift.png')}
-                                    />
-                                    <View style={styles.giftCardLabelCol}>
-                                        <Text style={styles.giftCardShopLabel}>
-                                            گیفت کارت {this.state.giftDescription} آیتونز
-                                        </Text>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.giftCardCode}>
-                                                {this.state.giftCost}
-                                            </Text>
-                                            <View style={styles.infoLabelShop}>
-                                                <Image
-                                                    source={require('./images/icCreditWhite/icCreditWhite.png')}
-                                                    style={styles.infoIcon}
-                                                />
-                                            </View>
-                                        </View>
-                                        <View style={styles.infoRow}>
-                                            <Text style={styles.giftCardCode}>
-                                                {this.state.giftCode}
-                                            </Text>
-                                            <View style={styles.infoLabelShop}>
-                                                <Image
-                                                    source={require('./images/icBarcode/icBarcode.png')}
-                                                    style={styles.infoIcon}
-                                                />
-                                            </View>
-                                        </View>
-                                    </View>
-                                </View>
+                            <View style={styles.giftCardFailStyle}>
+                                <Text style={styles.giftCardShopLabel}>
+                                    قبلا در این نظر سنجی شرکت کردید !
+                                </Text>
                             </View>
-                            <View style={styles.giftCardBuyStyle}>
+                            <View style={styles.giftCardBuyFailStyle}>
                                 <View style={styles.giftCardBuyContainer}>
-                                    <TouchableOpacity style={styles.buyButton}
-                                                      onPress={() => this.setState({giftCardCode: false})}
+                                    <TouchableOpacity style={styles.buyButton1}
+                                                      onPress={() => this.setState({giftCardFail: false})}
                                     >
                                         <Text style={styles.buyButtonLabel1}>
                                             باشه
@@ -254,23 +214,23 @@ export default class GiftSHop extends React.Component {
                     // animationInTiming={600}
                     // animationOutTiming={600}
                     hideModalContentWhileAnimating={true}
-                    onBackdropPress={() => this.setState({giftCardFail: false})}
-                    isVisible={this.state.giftCardFail}
+                    onBackdropPress={() => this.setState({userAFK: false})}
+                    isVisible={this.state.userAFK}
                     style={{margin: 0, marginTop: 40, height: 90, justifyContent: 'center', alignItems: 'center'}}
                 >
                     <View style={styles.giftCardFailModal}>
                         <View style={styles.giftCardShopContainer}>
                             <View style={styles.giftCardFailStyle}>
                                 <Text style={styles.giftCardShopLabel}>
-                                    موجودی حساب شما کافی نیست !
+                                    لطفا به سوالات پاسخ دهید !
                                 </Text>
                             </View>
                             <View style={styles.giftCardBuyFailStyle}>
                                 <View style={styles.giftCardBuyContainer}>
-                                    <TouchableOpacity style={styles.buyButton}
-                                                      onPress={() => this.setState({giftCardFail: false})}
+                                    <TouchableOpacity style={styles.buyButton1}
+                                                      onPress={() => this.setState({userAFK: false})}
                                     >
-                                        <Text style={styles.buyButtonLabel}>
+                                        <Text style={styles.buyButtonLabel1}>
                                             باشه
                                         </Text>
                                     </TouchableOpacity>
@@ -335,167 +295,14 @@ export default class GiftSHop extends React.Component {
         await AsyncStorage.setItem('status', this.state.status);
         await AsyncStorage.setItem('id', this.state.id);
     };
-    setModalResultVisible = (visible, giftshop) => {
-        this.setState({giftDescription: giftshop.description});
-        this.setState({giftCost: giftshop.cost});
-        this.setState({giftCode: giftshop.code});
-        this.setState({giftCardCode: visible});
+
+    setModalAFKVisible = (visible) => {
+        this.setState({userAFK: visible});
     };
-    setModalResultFailVisible = (visible, giftshop) => {
+    setModalResultFailVisible = (visible) => {
         this.setState({giftCardFail: visible});
     };
-    buyGift = async (giftshop) => {
-        // console.log('rgiiiiiiiiiiiid', giftshop.id)
-        fetch('http://127.0.0.1:5000/api/shoppingresult/' + giftshop.id, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                // console.log('response', response);
-                return response.json();
-            })
-            .then((responseJson) => {
-                // console.log('json', responseJson);
-                if (responseJson.status === 'OK') {
-                    this.setModalResultVisible(true, giftshop);
-                } else if (responseJson.status === 'not enough credit') {
-                    this.setModalResultFailVisible(true);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    };
 
-    loadGiftShop = async () => {
-        fetch('http://127.0.0.1:5000/api/giftshop', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                // console.log('respoooonse', response);
-                return response.json();
-            })
-            .then((responseJson) => {
-                    if (responseJson.status === 'OK') {
-
-                        // console.log("respoooooonse", responseJson.history);
-                        const giftShopListArrr = responseJson.gifts.map(giftShopItem => (
-                            <View key={giftShopItem.id} style={styles.giftCardShop}>
-                                <View style={styles.giftCardShopContainer}>
-                                    <View style={styles.giftCardStyle}>
-                                        <View style={styles.giftCardContainer}>
-                                            <Image
-                                                style={styles.icGiftShop}
-                                                source={require('./images/icGift/icGift.png')}
-                                            />
-                                            <View style={styles.giftCardLabelCol}>
-                                                <Text style={styles.giftCardShopLabel}>
-                                                    گیفت کارت {giftShopItem.description} آیتونز
-                                                </Text>
-                                                <View style={styles.infoRow}>
-                                                    <Text style={styles.giftCardCode}>
-                                                        {giftShopItem.cost}
-                                                    </Text>
-                                                    <View style={styles.infoLabelShop}>
-                                                        <Image
-                                                            source={require('./images/icCreditWhite/icCreditWhite.png')}
-                                                            style={styles.infoIcon}
-                                                        />
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <View style={styles.giftCardBuyStyle}>
-                                        <View style={styles.giftCardBuyContainer}>
-                                            <TouchableOpacity style={styles.buyButton}
-                                                              onPress={() => this.buyGift(giftShopItem)}
-                                            >
-                                                <Text style={styles.buyButtonLabel1}>
-                                                    خرید
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>
-                        ));
-                        this.setState({giftShopListArr: giftShopListArrr});
-                    }
-                    // this.setState({giftCode: responseJson["history"]["code"]});
-                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
-                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
-                    // this.setState({date: responseJson["history"]["date"]});
-                    // this.setState({description: responseJson["history"]["description"]});
-                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
-                    // this.setState({giftHistoryStatus: responseJson["status"]});
-                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
-                }
-            )
-            .catch((error) => {
-                // console.error(error);
-            });
-    };
-
-    loadGiftHistory = async () => {
-        fetch('http://127.0.0.1:5000/api/gifthistory', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                // console.log('respoooonse', response);
-                return response.json();
-            })
-            .then((responseJson) => {
-                    if (responseJson.status === 'OK') {
-                        // console.log("respoooooonse", responseJson.history);
-                        const historyListArrr = responseJson.history.map(historyItem => (
-                            <View key={historyItem.id} style={styles.giftCard}>
-                                <View style={styles.giftCardContainer}>
-                                    <Image
-                                        style={styles.icGift}
-                                        source={require('./images/icGift/icGift.png')}
-                                    />
-                                    <View style={styles.giftCardLabelCol}>
-                                        <Text style={styles.giftCardLabel}>
-                                            گیفت کارت {historyItem.description} آیتونز
-                                        </Text>
-                                        <Text style={styles.giftCardCode}>
-                                            {historyItem.code}
-                                        </Text>
-                                    </View>
-                                </View>
-                            </View>
-                        ));
-                        this.setState({historyListArr: historyListArrr});
-                    }
-                    // this.setState({giftCode: responseJson["history"]["code"]});
-                    // this.setState({giftUser_id: String(responseJson["history"]["user_id"])});
-                    // this.setState({gift_id: String(responseJson["history"]["gift_id"])});
-                    // this.setState({date: responseJson["history"]["date"]});
-                    // this.setState({description: responseJson["history"]["description"]});
-                    // this.setState({giftDBId: String(responseJson["history"]["id"])});
-                    // this.setState({giftHistoryStatus: responseJson["status"]});
-                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
-                }
-            )
-            .catch((error) => {
-                // console.error(error);
-            });
-    };
 
     loadUser = async () => {
         try {
@@ -509,9 +316,9 @@ export default class GiftSHop extends React.Component {
             // Error retrieving data
         }
     };
+    getSurveyItems = async () => {
 
-    signOutAsync = async () => {
-        fetch('http://127.0.0.1:5000/api/logout', {
+        fetch(this.state.srvyAPI, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -520,30 +327,174 @@ export default class GiftSHop extends React.Component {
             },
         })
             .then((response) => {
-                // console.log('respoooonse', response);
+                // console.log('response', response);
                 return response.json();
             })
             .then((responseJson) => {
-                    if (responseJson.status === 'OK') {
-                        // console.log("respoooooonse", responseJson.history);
-                        this.logOut();
-                    } else {
-                        this.logOut();
-                    }
+                // console.log('json', responseJson);
+                if (responseJson.status === 'OK') {
+                    // console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', this.state.srvyAPI);
+                    // console.log('rgiiidsbiuwebviuwebiuwebcwebiiiid', responseJson.survey.questions);
+                    let radio_props = [[],[],[],[]];
+                    const surveyItemListArrr = responseJson.survey.questions.map((surveyItem, Oindex) => (
+
+                        <View key={surveyItem.id} style={styles.giftCardShop}>
+                            <View style={styles.giftCardShopContainer}>
+                                <Text style={styles.giftCardShopLabel}>
+                                    {surveyItem.context}
+                                </Text>
+                                {surveyItem.items.map((item, index) => {
+                                    // this.setState({
+                                    //     questItem: [...this.state.questItem, {q: Oindex+1, i: index+1, val: true}]
+                                    // });
+                                    // this.state.questItem.forEach(function (v) {
+                                    //     if (v.q === surveyItem.id) {
+                                    //         if (v.i === item.id) {
+                                    //             console.log(v.q)
+                                    //         }
+                                    //     }
+                                    // });
+                                    // console.log('heeeeee',this.state.questItem[Oindex].options[index].val);
+                                    // this.state.questItem.map(value => value.q);
+
+                                    var c = item.context;
+                                    radio_props[Oindex].push({label: c, value: 1, itemID: item.id});
+
+                                    // return (
+                                    //     <View key={item.id} style={styles.infoRow}>
+                                    //
+                                    //         <Text style={styles.giftCardCode}>
+                                    //             {item.context} //
+                                    //             {index} //
+                                    //             {Oindex} //
+                                    //             {parseInt(item.id)} //
+                                    //             {parseInt(surveyItem.id)}
+                                    //         </Text>
+                                    //         <View style={styles.infoLabelShop}>
+                                    //             <RadioForm
+                                    //                 radio_props={radio_props}
+                                    //                 initial={0}
+                                    //                 onPress={(value) => {
+                                    //                     this.setState({value: value})
+                                    //                 }}
+                                    //             />
+                                    //             {/*<RadioButton*/}
+                                    //             {/*animation={'bounceIn'}*/}
+                                    //             {/*isSelected={ this.state.questItem[Oindex].options[index].val }*/}
+                                    //             {/*size={13}*/}
+                                    //             {/*innerColor={color2}*/}
+                                    //             {/*outerColor={color2}*/}
+                                    //             {/*onPress={() => (this.answerItem(Oindex, index))}*/}
+                                    //             {/*/>*/}
+                                    //         </View>
+                                    //     </View>
+                                    // );
+
+                                })
+                                }
+                                <RadioForm
+                                    radio_props={radio_props[Oindex]}
+                                    initial={0}
+                                    selectedButtonColor={color2}
+                                    buttonColor={color2}
+                                    labelStyle={styles.giftCardCode}
+                                    wrapStyle={styles.radio}
+                                    onPress={(v,i) => {
+                                        // console.log('eeeheeee',value,ll)
+                                        radio_props[Oindex][i].value = 0;
+                                        // this.setState({value: value})
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    ));
+                    this.setState({surveyItemListArr: surveyItemListArrr});
+                    this.setState({questionsItems: radio_props});
+                } else if (responseJson.status === 'user has already filled this survey') {
+                    this.setModalResultFailVisible(true);
                 }
-            )
+            })
             .catch((error) => {
-                // console.error(error);
-                this.logOut();
+                console.error(error);
             });
     };
-    logOut = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate('Auth');
+    loadSurvey = async () => {
+        try {
+            this.setState({srvyTitle: await AsyncStorage.getItem('srvyTitle')});
+            this.setState({srvyDescription: await AsyncStorage.getItem('srvyDescription')});
+            this.setState({srvyCredit: await AsyncStorage.getItem('srvyCredit')});
+            this.setState({srvyExpDate: await AsyncStorage.getItem('srvyExpDate')});
+            this.setState({srvyID: await AsyncStorage.getItem('srvyID')});
+            this.setState({srvyAPI: 'http://127.0.0.1:5000/api/fillSurvey/' + this.state.srvyID});
+            // console.log('hiiiiinkxenxekxnii',this.state.srvyAPI);
+
+            this.getSurveyItems();
+
+
+        } catch (error) {
+            // Error retrieving data
+        }
     };
+    submitSurvey =  () => {
+        let radio_props = this.state.questionsItems;
+        // console.log('here',radio_props)
+        let itemsList = [];
+        for (iter in radio_props) {
+            for (j in radio_props[iter]) {
+                if (radio_props[iter][j].value === 0) {
+                    itemsList.push(radio_props[iter][j].itemID);
+                } else {
+                    // console.log('else',j);
+
+                }
+            }
+        }
+        this.setState({itemsList: itemsList});
+        this.uploadSurvey(itemsList);
+    };
+    uploadSurvey = async (itemsList) => {
+        fetch('http://127.0.0.1:5000/api/submitFilling', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({"items": itemsList})
+        })
+            .then((response) => {
+                // console.log('response', response);
+                return response.json();
+            })
+            .then((responseJson) => {
+                // console.log('json', responseJson);
+                // this.setState({email: responseJson["user"]["email"]});
+                // this.setState({name: responseJson["user"]["name"]});
+                // this.setState({credit: String(responseJson["user"]["credit"])});
+                // this.setState({role: responseJson["user"]["role"]});
+                // this.setState({id: String(responseJson["user"]["id"])});
+                // this.setState({status: responseJson["status"]});
+                // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                if (responseJson.status === "OK") {
+                    // console.log('heleeee',responseJson)
+                    this.props.navigation.goBack();
+                    // Alert.alert("Author name at 0th index:  " + responseJson["status"]);
+                } else {
+                    // console.log('heleeee',responseJson)
+                    this.setModalAFKVisible(true)
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+
 }
 
 const styles = StyleSheet.create({
+    radio: {
+        flexDirection: 'row-reverse',
+    },
     giftCardCodeModalStyle: {
         height: 250,
         width: '90%',
@@ -563,7 +514,7 @@ const styles = StyleSheet.create({
     giftHistoryCardBarContainer: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         paddingLeft: 10
     },
@@ -582,14 +533,14 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'center',
-        color: color4,
+        color: color3,
     },
     buyButtonLabel1: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
         fontSize: 17,
         fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'center',
-        color: color1,
+        color: color4,
     },
     refreshButton: {
         width: 25,
@@ -597,6 +548,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buyButton: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
+        backgroundColor: color4,
+        justifyContent: 'center',
+    },
+    buyButton1: {
         width: '100%',
         height: '100%',
         borderRadius: 5,
@@ -618,11 +576,20 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         paddingTop: 10,
         color: 'white',
+        marginBottom: 8,
     },
     giftCardCode: {
         fontFamily: Platform.OS === 'ios' ? "IRANYekan(FaNum)" : "IRANYekanRegular(FaNum)",
-        fontSize: 17,
+        fontSize: 15,
         fontWeight: Platform.OS === 'ios' ? "normal" : "normal",
+        textAlign: 'right',
+        paddingRight: 0,
+        color: 'white',
+    },
+    surveyLabels: {
+        fontFamily: Platform.OS === 'ios' ? "IRANYekan" : "IRANYekanBold",
+        fontSize: 17,
+        fontWeight: Platform.OS === 'ios' ? "bold" : "normal",
         textAlign: 'right',
         paddingRight: 0,
         color: 'white',
@@ -646,11 +613,11 @@ const styles = StyleSheet.create({
         height: 70,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: color1
+        backgroundColor: '#fc44c5'
     },
     giftCardShop: {
         width: '100%',
-        height: 150,
+        maxHeight: '100%',
         marginTop: 10,
         borderRadius: 5,
         backgroundColor: color1
@@ -660,7 +627,7 @@ const styles = StyleSheet.create({
         height: 180,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: color1
+        backgroundColor: '#fc44c5'
     },
     giftCardFailModal: {
         width: '90%',
@@ -677,9 +644,17 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10
     },
+    surveyContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 10,
+        paddingRight: 10
+    },
     giftCardStyle: {
         width: '100%',
-        height: '70%'
+        height: '100%'
     },
     giftCardFailStyle: {
         width: '100%',
@@ -707,8 +682,8 @@ const styles = StyleSheet.create({
     giftCardShopContainer: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
         paddingLeft: 10,
         paddingRight: 10
     },
@@ -800,6 +775,13 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         backgroundColor: 'transparent',
     },
+    profileCardContainer2: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+    },
     giftHistoryCardContainer: {
         margin: 10,
         maxHeight: '100%',
@@ -821,23 +803,40 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         backgroundColor: 'transparent',
     },
+    giftHistoryCardContainer2: {
+        margin: 10,
+        marginTop: 0,
+        maxHeight: '100%',
+        // paddingTop: 0,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+        backgroundColor: 'transparent',
+    },
     profileCard: {
         width: '100%',
         height: 50,
         borderRadius: 5,
         backgroundColor: color2
     },
+    profileCard1: {
+        width: '100%',
+        height: 50,
+        borderRadius: 5,
+        marginBottom: 30
+    },
     giftHistoryCard: {
         width: '100%',
         borderRadius: 5,
         backgroundColor: color2,
         marginTop: 10,
-        paddingTop: 0
+        paddingTop: 0,
     },
     giftHistory1Card: {
         width: '100%',
         borderRadius: 5,
-        backgroundColor: color2,
+        backgroundColor: '#fcc8f1',
         marginTop: 10,
         paddingTop: 0,
         marginBottom: 30
@@ -846,6 +845,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginRight: 10,
         marginLeft: 10,
+        marginBottom: 10,
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
@@ -1014,6 +1014,12 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         marginLeft: 10,
+    },
+    TouchableOpacityboundLeft1: {
+        width: 50,
+        height: 50,
+        marginLeft: 10,
+        opacity: 0
     },
     TouchableOpacityboundFlexLeft: {
         flex: 1,
